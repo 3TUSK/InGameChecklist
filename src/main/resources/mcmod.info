@@ -1,0 +1,16 @@
+[
+{
+  "modid": "CustomChecklist",
+  "name": "Custom Checklist",
+  "description": "Add HUD style checklist into Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["3TUSK"],
+  "credits": "This guy: https://github.com/bakaxyf/ because he asked me to do it",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
