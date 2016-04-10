@@ -19,20 +19,22 @@ public class CommandTask extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/customchecklist <add|remove|show> [task]";
+		return "/customchecklist <help|add|remove|show|update> [task] [task description]";
 	}
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		if (args.length < 2)
-			throw new CommandException("Insufficient parameters. Please double check.");
+		if (args == null || args.length == 0) {
+			this.showHelpMessage(sender);
+			return;
+		}
 		String taskName = args[1];
 		switch (args[0]) {
 		case("add"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				if (TaskEntryLoader.globalEntryList.contains(aTaskName)) {
-						aSender.addChatMessage(new ChatComponentText("Task with same name is disallowed!"));
+						this.sendTextMessage(aSender, "Task with same name is disallowed!");
 						return;
 				}
 				TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
@@ -58,7 +60,7 @@ public class CommandTask extends CommandBase {
 					if (yetAnotherTask.getName().equals(aTaskName))
 						info = yetAnotherTask.getDescription();
 				}
-				aSender.addChatMessage(new ChatComponentText(info));
+				this.sendTextMessage(aSender, info);
 			});
 			break;
 		}
@@ -76,10 +78,14 @@ public class CommandTask extends CommandBase {
 						}
 					}
 				} else {
-					aSender.addChatMessage(new ChatComponentText("Failed to find requested task entry, making new one instead."));
+					this.sendTextMessage(aSender, "Failed to find requested task entry, making new one instead.");
 					TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 				}
 			});
+			break;
+		}
+		case("help"): {
+			this.showHelpMessage(sender);
 		}
 		default:
 			throw new CommandException("Invalid parameter, please double check.");
@@ -88,6 +94,19 @@ public class CommandTask extends CommandBase {
 	
 	private void execute(ICommandSender sender, String taskName, String[] taskDesc, ITaskCommandLogic logic) throws CommandException {
 		logic.execute(sender, taskName, taskDesc);
+	}
+	
+	private void showHelpMessage(ICommandSender sender) {
+		this.sendTextMessage(sender, this.getCommandUsage(sender));
+		this.sendTextMessage(sender, "    " + "help: Show this help");
+		this.sendTextMessage(sender, "    " + "add: Add a new task to checklist");
+		this.sendTextMessage(sender, "    " + "remove: Remove an existed task from checklist");
+		this.sendTextMessage(sender, "    " + "show: Show description of a task");
+		this.sendTextMessage(sender, "    " + "update: Update the description for an existed task");
+	}
+	
+	private void sendTextMessage(ICommandSender sender, String message) {
+		sender.addChatMessage(new ChatComponentText(message));
 	}
 	
 	private String stringArrayToString(String[] array) {
