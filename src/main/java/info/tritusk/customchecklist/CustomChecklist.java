@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 @Mod(modid = "CustomChecklist", name = "Custom Checklist", version = "@VERSION@", useMetadata = true)
 public class CustomChecklist {
@@ -32,6 +34,16 @@ public class CustomChecklist {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
+	}
+	
+	@EventHandler
+	public void onServerStart(FMLServerStartingEvent event) {
+		
+	}
+	
+	@EventHandler
+	public void onServerStop(FMLServerStoppingEvent event) {
+		
 	}
 
 }

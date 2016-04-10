@@ -1,5 +1,7 @@
 package info.tritusk.customchecklist.common;
 
+import java.io.File;
+
 import org.apache.logging.log4j.Logger;
 
 import info.tritusk.customchecklist.common.config.ConfigMain;
@@ -13,7 +15,9 @@ public class CClProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
-		ConfigMain.initConfig(event.getSuggestedConfigurationFile());
+		File mainDir = event.getModConfigurationDirectory();
+		ConfigMain.initConfig(new File(mainDir, "CustomChecklist.cfg"));
+		ConfigMain.initGlobalTasks(new File(mainDir, "GlobalTasks.xml"));
 	}
 	
 	public void init(FMLInitializationEvent event) {
