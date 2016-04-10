@@ -62,6 +62,25 @@ public class CommandTask extends CommandBase {
 			});
 			break;
 		}
+		case("update"): {
+			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
+			this.execute(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
+				if (TaskEntryLoader.globalEntryList.contains(aTaskDesc)) {
+					Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
+					while (iterator.hasNext()) {
+						TaskEntry yetAnotherTask = iterator.next();
+						if (yetAnotherTask.getName().equals(aTaskName)) {
+							iterator.remove();
+							TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+							break;
+						}
+					}
+				} else {
+					aSender.addChatMessage(new ChatComponentText("Failed to find requested task entry, making new one instead."));
+					TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+				}
+			});
+		}
 		default:
 			throw new CommandException("Invalid parameter, please double check.");
 		}
@@ -76,7 +95,7 @@ public class CommandTask extends CommandBase {
 		for (String str : array) {
 			builder.append(str).append(' ');
 		}
-		return builder.substring(0, builder.length());
+		return builder.toString();
 	}
 	
 	public static interface ITaskCommandLogic {
