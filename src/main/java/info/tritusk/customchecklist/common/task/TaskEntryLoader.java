@@ -23,9 +23,9 @@ import info.tritusk.customchecklist.common.config.ConfigMain;
 
 public final class TaskEntryLoader {
 	
-	public static Collection<TaskEntry> globalEntryList = new ArrayList<TaskEntry>();
+	public static volatile Collection<TaskEntry> globalEntryList = new ArrayList<TaskEntry>();
 	
-	public static Collection<TaskEntry> remoteEntryList = new ArrayList<TaskEntry>();
+	public static volatile Collection<TaskEntry> remoteEntryList = new ArrayList<TaskEntry>();
 	
 	public static boolean xmlHandlerInitialized = false;
 	
@@ -45,7 +45,8 @@ public final class TaskEntryLoader {
 	public static void loadGlobalChecklist(File source) {
 		try {
 			Document xmlDoc = reader.parse(source);
-			NodeList checklist = xmlDoc.getElementsByTagName("task");
+			Node mainNode = xmlDoc.getElementsByTagName("LocalChecklist").item(0);
+			NodeList checklist = ((Element) mainNode).getElementsByTagName("task");
 			for (int n = 0; n < checklist.getLength(); n++) {
 				try {
 					Node aTask = checklist.item(n);
@@ -65,18 +66,22 @@ public final class TaskEntryLoader {
 	public static void saveGlobalChecklist(Collection<TaskEntry> tasks) {
 		try {
 			Document xmlDoc = reader.newDocument();
+			Element main = xmlDoc.createElement("LocalChecklist");
 			for (TaskEntry task : tasks) {
 				Element aTask = xmlDoc.createElement("task");
 				aTask.setAttribute("name", task.getName());
 				aTask.setTextContent(task.getDescription());
-				xmlDoc.appendChild(aTask);
+				main.appendChild(aTask);
 			}
+			xmlDoc.appendChild(main);
 			writer.setOutputProperty(OutputKeys.INDENT, "yes");
 			writer.setOutputProperty(OutputKeys.METHOD, "xml");
 			writer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasksFilePath)));
+			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasks.getAbsolutePath())));
+			CClProxy.log.info("Successfully saved local checklist.");
 		} catch (Exception e) {
-			CClProxy.log.error("An error occured when trying to save the global config file.");
+			CClProxy.log.error("An error occured when trying to save the local checklist file.");
+			e.printStackTrace();
 		}
 	}
 	

@@ -38,12 +38,12 @@ public class CustomChecklist {
 	
 	@EventHandler
 	public void onServerStart(FMLServerStartingEvent event) {
-		
+		proxy.onServerStarting(event);
 	}
 	
 	@EventHandler
 	public void onServerStop(FMLServerStoppingEvent event) {
-		
+		proxy.onServerStopping(event);
 	}
 
 }
