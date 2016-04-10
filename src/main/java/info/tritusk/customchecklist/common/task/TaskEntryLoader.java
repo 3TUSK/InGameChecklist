@@ -59,7 +59,8 @@ public final class TaskEntryLoader {
 			}
 			
 		} catch (Exception e) {
-			
+			CClProxy.log.error("Error occured when loading checklist.");
+			CClProxy.log.error("Please double check your checklist file, make sure that everything matches standard.");
 		}
 	}
 	
@@ -77,7 +78,9 @@ public final class TaskEntryLoader {
 			writer.setOutputProperty(OutputKeys.INDENT, "yes");
 			writer.setOutputProperty(OutputKeys.METHOD, "xml");
 			writer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasks.getAbsolutePath())));
+			ConfigMain.globalTasks.delete();
+			ConfigMain.globalTasks.createNewFile();
+			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasks)));
 			CClProxy.log.info("Successfully saved local checklist.");
 		} catch (Exception e) {
 			CClProxy.log.error("An error occured when trying to save the local checklist file.");
