@@ -1,13 +1,13 @@
-package info.tritusk.customchecklist.common;
+package info.tritusk.ingamechecklist.common;
 
 import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
-import info.tritusk.customchecklist.common.command.CommandAdjustPos;
-import info.tritusk.customchecklist.common.command.CommandTask;
-import info.tritusk.customchecklist.common.config.ConfigMain;
-import info.tritusk.customchecklist.common.task.TaskEntryLoader;
+import info.tritusk.ingamechecklist.common.command.CommandAdjustPos;
+import info.tritusk.ingamechecklist.common.command.CommandTask;
+import info.tritusk.ingamechecklist.common.config.ConfigMain;
+import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-public class CClProxy {
+public class IClProxy {
 	
 	public static Logger log;
 	

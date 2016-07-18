@@ -1,13 +1,13 @@
-package info.tritusk.customchecklist.client;
+package info.tritusk.ingamechecklist.client;
 
-import info.tritusk.customchecklist.client.handler.HUDHandler;
-import info.tritusk.customchecklist.common.CClProxy;
+import info.tritusk.ingamechecklist.client.handler.HUDHandler;
+import info.tritusk.ingamechecklist.common.IClProxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class CClProxyClient extends CClProxy {
+public class IClProxyClient extends IClProxy {
 	
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {

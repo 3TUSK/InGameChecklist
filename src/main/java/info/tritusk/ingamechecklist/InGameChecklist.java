@@ -1,6 +1,6 @@
-package info.tritusk.customchecklist;
+package info.tritusk.ingamechecklist;
 
-import info.tritusk.customchecklist.common.CClProxy;
+import info.tritusk.ingamechecklist.common.IClProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -11,14 +11,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = "CustomChecklist", name = "Custom Checklist", version = "@VERSION@", useMetadata = true)
-public class CustomChecklist {
+@Mod(modid = "InGameChecklist", name = "In-Game Checklist", version = "@VERSION@", useMetadata = true)
+public class InGameChecklist {
 	
 	@Instance("CustomChecklist")
-	public CustomChecklist instance;
+	public InGameChecklist instance;
 	
-	@SidedProxy(serverSide = "info.tritusk.customchecklist.common.CClProxy", clientSide = "info.tritusk.customchecklist.client.CClProxyClient")
-	public static CClProxy proxy;
+	@SidedProxy(serverSide = "info.tritusk.ingamechecklist.common.IClProxy", clientSide = "info.tritusk.ingamechecklist.client.IClProxyClient")
+	public static IClProxy proxy;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

@@ -1,7 +1,7 @@
-package info.tritusk.customchecklist.common.command;
+package info.tritusk.ingamechecklist.common.command;
 
-import info.tritusk.customchecklist.common.network.NetworkHandler;
-import info.tritusk.customchecklist.common.network.PacketSyncChecklist;
+import info.tritusk.ingamechecklist.common.network.NetworkHandler;
+import info.tritusk.ingamechecklist.common.network.PacketSyncChecklist;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

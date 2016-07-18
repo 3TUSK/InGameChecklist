@@ -1,4 +1,4 @@
-package info.tritusk.customchecklist.common.task;
+package info.tritusk.ingamechecklist.common.task;
 
 import java.util.HashMap;
 import java.util.Map;

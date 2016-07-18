@@ -1,4 +1,4 @@
-package info.tritusk.customchecklist.common.network;
+package info.tritusk.ingamechecklist.common.network;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;

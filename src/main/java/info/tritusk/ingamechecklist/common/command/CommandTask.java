@@ -1,10 +1,10 @@
-package info.tritusk.customchecklist.common.command;
+package info.tritusk.ingamechecklist.common.command;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-import info.tritusk.customchecklist.common.task.TaskEntry;
-import info.tritusk.customchecklist.common.task.TaskEntryLoader;
+import info.tritusk.ingamechecklist.common.task.TaskEntry;
+import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

@@ -1,4 +1,4 @@
-package info.tritusk.customchecklist.common.network;
+package info.tritusk.ingamechecklist.common.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;

@@ -1,7 +1,7 @@
-package info.tritusk.customchecklist.client.handler;
+package info.tritusk.ingamechecklist.client.handler;
 
-import info.tritusk.customchecklist.common.task.TaskEntry;
-import info.tritusk.customchecklist.common.task.TaskEntryLoader;
+import info.tritusk.ingamechecklist.common.task.TaskEntry;
+import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

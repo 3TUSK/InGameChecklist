@@ -1,4 +1,4 @@
-package info.tritusk.customchecklist.common.task;
+package info.tritusk.ingamechecklist.common.task;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,8 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import info.tritusk.customchecklist.common.CClProxy;
-import info.tritusk.customchecklist.common.config.ConfigMain;
+import info.tritusk.ingamechecklist.common.IClProxy;
+import info.tritusk.ingamechecklist.common.config.ConfigMain;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,13 +58,13 @@ public final class TaskEntryLoader {
 					String taskDesc = ((Element)aTask).getTextContent();
 					localEntryList.add(new TaskEntry(taskName, taskDesc));
 				} catch (Exception e) {
-					CClProxy.log.error("Error occured when append a new task.");
+					IClProxy.log.error("Error occured when append a new task.");
 				}
 			}
 			
 		} catch (Exception e) {
-			CClProxy.log.error("Error occured when loading checklist.");
-			CClProxy.log.error("Please double check your checklist file, make sure that everything matches standard.");
+			IClProxy.log.error("Error occured when loading checklist.");
+			IClProxy.log.error("Please double check your checklist file, make sure that everything matches standard.");
 		}
 	}
 	
@@ -85,9 +85,9 @@ public final class TaskEntryLoader {
 			ConfigMain.globalTasks.delete();
 			ConfigMain.globalTasks.createNewFile();
 			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasks)));
-			CClProxy.log.info("Successfully saved local checklist.");
+			IClProxy.log.info("Successfully saved local checklist.");
 		} catch (Exception e) {
-			CClProxy.log.error("An error occured when trying to save the local checklist file.");
+			IClProxy.log.error("An error occured when trying to save the local checklist file.");
 			e.printStackTrace();
 		}
 	}
