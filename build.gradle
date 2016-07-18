@@ -21,8 +21,8 @@ plugins {
 }
 */
 version = "0.0.1"
-group= "info.tritusk.customchecklist"
-archivesBaseName = "CustomChecklist"
+group= "info.tritusk.ingamechecklist"
+archivesBaseName = "InGameChecklist"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
