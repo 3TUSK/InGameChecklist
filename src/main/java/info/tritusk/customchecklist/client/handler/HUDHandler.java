@@ -19,7 +19,7 @@ public class HUDHandler {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		
 		fontRenderer.drawString("Test context", posX, posY, 0x34CD9BF, true);
-		fontRenderer.drawString("xyf must go die", posX, posY + 10, 0x34CD9BF, true);
+		
 		fontRenderer.drawString("Loaded " + TaskEntryLoader.globalEntryList.size() + " entries", posX, posY + 30, 0xCCDDFF, true);
 	}
 }

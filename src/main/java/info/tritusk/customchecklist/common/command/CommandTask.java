@@ -8,7 +8,8 @@ import info.tritusk.customchecklist.common.task.TaskEntryLoader;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
 public class CommandTask extends CommandBase {
 
@@ -23,7 +24,7 @@ public class CommandTask extends CommandBase {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args == null || args.length == 0) {
 			this.showHelpMessage(sender);
 			return;
@@ -32,7 +33,7 @@ public class CommandTask extends CommandBase {
 		switch (args[0]) {
 		case("add"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
-			this.execute(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
+			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				if (TaskEntryLoader.globalEntryList.contains(aTaskName)) {
 						this.sendTextMessage(aSender, "Task with same name is disallowed!");
 						return;
@@ -42,7 +43,7 @@ public class CommandTask extends CommandBase {
 			break;
 		}
 		case("remove"): {
-			this.execute(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
+			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
 				while (iterator.hasNext()) {
 					if (iterator.next().getName().equals(aTaskName))
@@ -52,7 +53,7 @@ public class CommandTask extends CommandBase {
 			break;
 		}
 		case("show"): {
-			this.execute(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
+			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				String info = "";
 				Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
 				while (iterator.hasNext()) {
@@ -66,7 +67,7 @@ public class CommandTask extends CommandBase {
 		}
 		case("update"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
-			this.execute(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
+			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				if (TaskEntryLoader.globalEntryList.contains(aTaskDesc)) {
 					Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
 					while (iterator.hasNext()) {
@@ -86,13 +87,14 @@ public class CommandTask extends CommandBase {
 		}
 		case("help"): {
 			this.showHelpMessage(sender);
+			break;
 		}
 		default:
 			throw new CommandException("Invalid parameter, please double check.");
 		}
 	}
 	
-	private void execute(ICommandSender sender, String taskName, String[] taskDesc, ITaskCommandLogic logic) throws CommandException {
+	private void execute0(ICommandSender sender, String taskName, String[] taskDesc, ITaskCommandLogic logic) throws CommandException {
 		logic.execute(sender, taskName, taskDesc);
 	}
 	
@@ -106,7 +108,7 @@ public class CommandTask extends CommandBase {
 	}
 	
 	private void sendTextMessage(ICommandSender sender, String message) {
-		sender.addChatMessage(new ChatComponentText(message));
+		sender.addChatMessage(new TextComponentString(message));
 	}
 	
 	private String stringArrayToString(String[] array) {
