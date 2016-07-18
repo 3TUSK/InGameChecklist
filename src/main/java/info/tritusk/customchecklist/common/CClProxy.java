@@ -4,9 +4,11 @@ import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
+import info.tritusk.customchecklist.common.command.CommandAdjustPos;
 import info.tritusk.customchecklist.common.command.CommandTask;
 import info.tritusk.customchecklist.common.config.ConfigMain;
 import info.tritusk.customchecklist.common.task.TaskEntryLoader;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -33,6 +35,8 @@ public class CClProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 		if (!TaskEntryLoader.xmlHandlerInitialized)
 			TaskEntryLoader.initXMLHandler();
+		
+		ClientCommandHandler.instance.registerCommand(new CommandAdjustPos());
 	}
 
 	public void onServerStarting(FMLServerStartingEvent event) {
