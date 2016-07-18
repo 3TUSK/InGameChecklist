@@ -1,7 +1,7 @@
 [
 {
-  "modid": "CustomChecklist",
-  "name": "Custom Checklist",
+  "modid": "InGameChecklist",
+  "name": "In-Game Checklist",
   "description": "Add HUD style checklist into Minecraft",
   "version": "${version}",
   "mcversion": "${mcversion}",
