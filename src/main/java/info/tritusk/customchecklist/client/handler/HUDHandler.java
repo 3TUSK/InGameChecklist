@@ -20,6 +20,6 @@ public class HUDHandler {
 		
 		fontRenderer.drawString("Test context", posX, posY, 0x34CD9BF, true);
 		
-		fontRenderer.drawString("Loaded " + TaskEntryLoader.globalEntryList.size() + " entries", posX, posY + 30, 0xCCDDFF, true);
+		fontRenderer.drawString("Loaded " + TaskEntryLoader.localEntryList.size() + " entries", posX, posY + 30, 0xCCDDFF, true);
 	}
 }

@@ -34,17 +34,17 @@ public class CommandTask extends CommandBase {
 		case("add"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (TaskEntryLoader.globalEntryList.contains(aTaskName)) {
+				if (TaskEntryLoader.localEntryList.contains(aTaskName)) {
 						this.sendTextMessage(aSender, "Task with same name is disallowed!");
 						return;
 				}
-				TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+				TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 			});
 			break;
 		}
 		case("remove"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
+				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 				while (iterator.hasNext()) {
 					if (iterator.next().getName().equals(aTaskName))
 						iterator.remove();
@@ -55,7 +55,7 @@ public class CommandTask extends CommandBase {
 		case("show"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				String info = "";
-				Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
+				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 				while (iterator.hasNext()) {
 					TaskEntry yetAnotherTask = iterator.next();
 					if (yetAnotherTask.getName().equals(aTaskName))
@@ -68,19 +68,19 @@ public class CommandTask extends CommandBase {
 		case("update"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (TaskEntryLoader.globalEntryList.contains(aTaskDesc)) {
-					Iterator<TaskEntry> iterator = TaskEntryLoader.globalEntryList.iterator();
+				if (TaskEntryLoader.localEntryList.contains(aTaskDesc)) {
+					Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 					while (iterator.hasNext()) {
 						TaskEntry yetAnotherTask = iterator.next();
 						if (yetAnotherTask.getName().equals(aTaskName)) {
 							iterator.remove();
-							TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+							TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 							break;
 						}
 					}
 				} else {
 					this.sendTextMessage(aSender, "Failed to find requested task entry, making new one instead.");
-					TaskEntryLoader.globalEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+					TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 				}
 			});
 			break;

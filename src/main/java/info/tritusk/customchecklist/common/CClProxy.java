@@ -46,7 +46,7 @@ public class CClProxy {
 	}
 	
 	public void onServerStopping(FMLServerStoppingEvent event) {
-		TaskEntryLoader.saveGlobalChecklist(TaskEntryLoader.globalEntryList);
+		TaskEntryLoader.saveGlobalChecklist(TaskEntryLoader.localEntryList);
 	}
 
 }

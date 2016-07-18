@@ -20,10 +20,13 @@ import org.w3c.dom.NodeList;
 
 import info.tritusk.customchecklist.common.CClProxy;
 import info.tritusk.customchecklist.common.config.ConfigMain;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class TaskEntryLoader {
 	
-	public static volatile Collection<TaskEntry> globalEntryList = new ArrayList<TaskEntry>();
+	@SideOnly(Side.CLIENT)
+	public static volatile Collection<TaskEntry> localEntryList = new ArrayList<TaskEntry>();
 	
 	public static volatile Collection<TaskEntry> remoteEntryList = new ArrayList<TaskEntry>();
 	
@@ -52,7 +55,7 @@ public final class TaskEntryLoader {
 					Node aTask = checklist.item(n);
 					String taskName = ((Element)aTask).getAttribute("name");
 					String taskDesc = ((Element)aTask).getTextContent();
-					globalEntryList.add(new TaskEntry(taskName, taskDesc));
+					localEntryList.add(new TaskEntry(taskName, taskDesc));
 				} catch (Exception e) {
 					CClProxy.log.error("Error occured when append a new task.");
 				}
