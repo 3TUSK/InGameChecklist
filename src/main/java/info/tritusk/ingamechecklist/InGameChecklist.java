@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 @Mod(modid = "InGameChecklist", name = "In-Game Checklist", version = "@VERSION@", useMetadata = true)
 public class InGameChecklist {
 	
-	@Instance("CustomChecklist")
+	@Instance("InGameChecklist")
 	public InGameChecklist instance;
 	
 	@SidedProxy(serverSide = "info.tritusk.ingamechecklist.common.IClProxy", clientSide = "info.tritusk.ingamechecklist.client.IClProxyClient")

@@ -11,12 +11,12 @@ public class CommandAdjustPos extends CommandBase {
 
 	@Override
 	public String getCommandName() {
-		return "customchecklistpos";
+		return "checklistpos";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/customchecklistpos <x> <y>";
+		return "/checklistpos <x> <y>";
 	}
 
 	@Override

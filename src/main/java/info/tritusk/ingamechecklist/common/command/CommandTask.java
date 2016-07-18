@@ -15,12 +15,12 @@ public class CommandTask extends CommandBase {
 
 	@Override
 	public String getCommandName() {
-		return "customchecklist";
+		return "checklist";
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/customchecklist <help|add|remove|show|update> [task] [task description]";
+		return "/checklist <help|add|remove|show|update> [task] [task description]";
 	}
 
 	@Override
