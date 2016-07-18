@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,9 +27,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public final class TaskEntryLoader {
 	
 	@SideOnly(Side.CLIENT)
-	public static volatile Collection<TaskEntry> localEntryList = new ArrayList<TaskEntry>();
+	public static volatile List<TaskEntry> localEntryList = new ArrayList<TaskEntry>();
 	
-	public static volatile Collection<TaskEntry> remoteEntryList = new ArrayList<TaskEntry>();
+	public static volatile List<TaskEntry> remoteEntryList = new ArrayList<TaskEntry>();
 	
 	public static boolean xmlHandlerInitialized = false;
 	
