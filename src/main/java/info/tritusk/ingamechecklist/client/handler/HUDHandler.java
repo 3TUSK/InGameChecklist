@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class HUDHandler {
 
 	public static int posX = 10, posY = 45;
+	
+	static boolean showDescription = true;
 
 	@SubscribeEvent
 	public void onRenderingScreen(RenderGameOverlayEvent.Post event) {
@@ -22,8 +24,7 @@ public class HUDHandler {
 		if (event.getType() == ElementType.CHAT) {
 			// something
 			// ScaledResolution resolution = event.getResolution();
-			// int width = resolution.getScaledWidth(), height =
-			// resolution.getScaledHeight();
+			// int width = resolution.getScaledWidth(), height = resolution.getScaledHeight();
 			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
 			Gui.drawRect(posX - 5, posY - 5, posX + 105, posY + 125, 1342177280);
@@ -31,14 +32,18 @@ public class HUDHandler {
 			fontRenderer.drawString("Test context", posX, posY, 0x34CD9BF, true);
 			fontRenderer.drawString("Loaded " + TaskEntryLoader.localEntryList.size() + " entries", posX, posY + 10, 0xCCDDFF, true);
 			
-			fontRenderer.drawString("Current task: ", posX, posY + 30, 0x3034930, true);
+			fontRenderer.drawString("Current task: ", posX, posY + 30, 0x9A66CCFF, true);
 			
 			int posYOffset = 40;
 			TaskEntry entry = TaskEntryLoader.localEntryList.get(/*new java.util.Random().nextInt(TaskEntryLoader.localEntryList.size())*/0);
 			fontRenderer.drawString(entry.getName(), posX, posY + posYOffset, 0xCCDDFF, true);
-			for (String line : fontRenderer.listFormattedStringToWidth(entry.getDescription(), 100)) {
-				posYOffset += 10;
+			if (showDescription) {
+				for (String line : fontRenderer.listFormattedStringToWidth(entry.getDescription(), 100)) {
+					posYOffset += 10;
 				fontRenderer.drawString(line, posX, posY + posYOffset, 0xCCDDFF, true);
+				}
+			} else {
+				fontRenderer.drawString("[Press L to show more]", posX, posY + posYOffset + 10, 0xCCDDFF, true);
 			}
 		}
 	}
