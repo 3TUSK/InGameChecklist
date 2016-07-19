@@ -4,11 +4,9 @@ import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
-import info.tritusk.ingamechecklist.common.command.CommandAdjustPos;
 import info.tritusk.ingamechecklist.common.command.CommandTask;
 import info.tritusk.ingamechecklist.common.config.ConfigMain;
 import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -35,8 +33,6 @@ public class IClProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 		if (!TaskEntryLoader.xmlHandlerInitialized)
 			TaskEntryLoader.initXMLHandler();
-		
-		ClientCommandHandler.instance.registerCommand(new CommandAdjustPos());
 	}
 
 	public void onServerStarting(FMLServerStartingEvent event) {

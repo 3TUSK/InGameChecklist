@@ -5,7 +5,9 @@ import org.lwjgl.input.Keyboard;
 import info.tritusk.ingamechecklist.client.handler.HUDHandler;
 import info.tritusk.ingamechecklist.client.handler.KeyBindingHandler;
 import info.tritusk.ingamechecklist.common.IClProxy;
+import info.tritusk.ingamechecklist.common.command.CommandAdjustPos;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -34,6 +36,8 @@ public class IClProxyClient extends IClProxy {
 		super.postInit(event);
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
 		MinecraftForge.EVENT_BUS.register(new KeyBindingHandler());
+		
+		ClientCommandHandler.instance.registerCommand(new CommandAdjustPos());
 	}
 
 }
