@@ -22,7 +22,7 @@ public class CommandRemoteTasksSync extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		//Blame @bakaxyf, the following code WILL CRASH GAME, and it will be updated soon
-		//NetworkHandler.INSTANCE.sendToAll(new PacketSyncChecklist(args[0], args[1]));
+		NetworkHandler.INSTANCE.sendToAll(new PacketSyncChecklist(args[0], args[1]));
 	}
 
 }

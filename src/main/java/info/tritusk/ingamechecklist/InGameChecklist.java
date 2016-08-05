@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = "InGameChecklist", name = "In-Game Checklist", version = "@VERSION@", useMetadata = true)
+@Mod(modid = "InGameChecklist", name = "In-Game Checklist", version = "@VERSION@", useMetadata = true, clientSideOnly = true)
 public class InGameChecklist {
 	
 	@Instance("InGameChecklist")

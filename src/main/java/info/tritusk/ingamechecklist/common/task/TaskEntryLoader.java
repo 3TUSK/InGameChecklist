@@ -40,7 +40,7 @@ public final class TaskEntryLoader {
 		try {
 			reader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			writer = TransformerFactory.newInstance().newTransformer();
-			xmlHandlerInitialized = reader != null;
+			xmlHandlerInitialized = reader != null && writer != null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
