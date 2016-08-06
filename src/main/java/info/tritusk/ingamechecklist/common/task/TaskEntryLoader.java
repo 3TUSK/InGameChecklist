@@ -33,8 +33,8 @@ public final class TaskEntryLoader {
 	
 	public static boolean xmlHandlerInitialized = false;
 	
-	private static DocumentBuilder reader;
-	private static Transformer writer;
+	public static DocumentBuilder reader;
+	public static Transformer writer;
 	
 	public static void initXMLHandler() {
 		try {
