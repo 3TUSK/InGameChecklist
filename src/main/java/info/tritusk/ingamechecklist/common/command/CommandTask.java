@@ -46,7 +46,7 @@ public class CommandTask extends CommandBase {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 				while (iterator.hasNext()) {
-					if (iterator.next().getName().equals(aTaskName))
+					if (iterator.next().name().equals(aTaskName))
 						iterator.remove();
 				}
 			});
@@ -58,8 +58,8 @@ public class CommandTask extends CommandBase {
 				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 				while (iterator.hasNext()) {
 					TaskEntry yetAnotherTask = iterator.next();
-					if (yetAnotherTask.getName().equals(aTaskName))
-						info = yetAnotherTask.getDescription();
+					if (yetAnotherTask.name().equals(aTaskName))
+						info = yetAnotherTask.description();
 				}
 				this.sendTextMessage(aSender, info);
 			});
@@ -72,7 +72,7 @@ public class CommandTask extends CommandBase {
 					Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
 					while (iterator.hasNext()) {
 						TaskEntry yetAnotherTask = iterator.next();
-						if (yetAnotherTask.getName().equals(aTaskName)) {
+						if (yetAnotherTask.name().equals(aTaskName)) {
 							iterator.remove();
 							TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 							break;

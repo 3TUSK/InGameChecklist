@@ -22,9 +22,6 @@ public class HUDHandler {
 			return;
 		
 		if (event.getType() == ElementType.CHAT) {
-			// something
-			// ScaledResolution resolution = event.getResolution();
-			// int width = resolution.getScaledWidth(), height = resolution.getScaledHeight();
 			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
 			Gui.drawRect(posX - 5, posY - 5, posX + 105, posY + 125, 1342177280);
@@ -36,9 +33,9 @@ public class HUDHandler {
 			
 			int posYOffset = 40;
 			TaskEntry entry = TaskEntryLoader.localEntryList.get(/*new java.util.Random().nextInt(TaskEntryLoader.localEntryList.size())*/0);
-			fontRenderer.drawString(entry.getName(), posX, posY + posYOffset, 0xCCDDFF, true);
+			fontRenderer.drawString(entry.name(), posX, posY + posYOffset, 0xCCDDFF, true);
 			if (showDescription) {
-				for (String line : fontRenderer.listFormattedStringToWidth(entry.getDescription(), 100)) {
+				for (String line : fontRenderer.listFormattedStringToWidth(entry.description(), 100)) {
 					posYOffset += 10;
 				fontRenderer.drawString(line, posX, posY + posYOffset, 0xCCDDFF, true);
 				}

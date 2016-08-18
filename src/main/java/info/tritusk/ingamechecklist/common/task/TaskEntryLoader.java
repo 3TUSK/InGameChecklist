@@ -74,8 +74,8 @@ public final class TaskEntryLoader {
 			Element main = xmlDoc.createElement("LocalChecklist");
 			for (TaskEntry task : tasks) {
 				Element aTask = xmlDoc.createElement("task");
-				aTask.setAttribute("name", task.getName());
-				aTask.setTextContent(task.getDescription());
+				aTask.setAttribute("name", task.name());
+				aTask.setTextContent(task.description());
 				main.appendChild(aTask);
 			}
 			xmlDoc.appendChild(main);
