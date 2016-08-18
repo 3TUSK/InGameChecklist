@@ -35,17 +35,17 @@ public class CommandTask extends CommandBase {
 		case("add"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (IClProxy.localTaskManager.getAll().contains(aTaskName)) {
+				if (IClProxy.localTaskManager.getTasks().contains(aTaskName)) {
 						this.sendTextMessage(aSender, "Task with same name is disallowed!");
 						return;
 				}
-				IClProxy.localTaskManager.getAll().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+				IClProxy.localTaskManager.getTasks().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 			});
 			break;
 		}
 		case("remove"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
+				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
 				while (iterator.hasNext()) {
 					if (iterator.next().name().equals(aTaskName))
 						iterator.remove();
@@ -56,7 +56,7 @@ public class CommandTask extends CommandBase {
 		case("show"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				String info = "";
-				Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
+				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
 				while (iterator.hasNext()) {
 					ITask yetAnotherTask = iterator.next();
 					if (yetAnotherTask.name().equals(aTaskName))
@@ -69,13 +69,13 @@ public class CommandTask extends CommandBase {
 		case("update"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (IClProxy.localTaskManager.getAll().contains(aTaskDesc)) {
-					Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
+				if (IClProxy.localTaskManager.getTasks().contains(aTaskDesc)) {
+					Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
 					while (iterator.hasNext()) {
 						ITask yetAnotherTask = iterator.next();
 						if (yetAnotherTask.name().equals(aTaskName)) {
 							iterator.remove();
-							IClProxy.localTaskManager.getAll().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+							IClProxy.localTaskManager.getTasks().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 							break;
 						}
 					}
