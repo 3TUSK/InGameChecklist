@@ -29,8 +29,6 @@ public final class ConfigMain {
 				try {
 					URL url = new URL(urlString);
 					InputStream rawFile = url.openConnection().getInputStream();
-					if (!TaskEntryLoader.xmlHandlerInitialized)
-						TaskEntryLoader.initXMLHandler();
 					Document xmlDoc = TaskEntryLoader.reader.parse(rawFile);
 					xmlDoc.normalize();
 				} catch (MalformedURLException e) {

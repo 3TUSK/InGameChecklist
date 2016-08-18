@@ -7,8 +7,10 @@ public interface ITaskManager {
 	
 	boolean init();
 	
-	Collection<ITask> loadFrom(InputStream input);
+	boolean loadFrom(InputStream input);
 	
-	void save(Collection<ITask> tasks);
+	boolean save(Collection<ITask> tasks);
+	
+	Collection<ITask> getAll();
 
 }

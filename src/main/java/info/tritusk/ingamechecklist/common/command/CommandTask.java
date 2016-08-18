@@ -3,8 +3,9 @@ package info.tritusk.ingamechecklist.common.command;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import info.tritusk.ingamechecklist.api.ITask;
+import info.tritusk.ingamechecklist.common.IClProxy;
 import info.tritusk.ingamechecklist.common.task.TaskEntry;
-import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -34,17 +35,17 @@ public class CommandTask extends CommandBase {
 		case("add"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (TaskEntryLoader.localEntryList.contains(aTaskName)) {
+				if (IClProxy.localTaskManager.getAll().contains(aTaskName)) {
 						this.sendTextMessage(aSender, "Task with same name is disallowed!");
 						return;
 				}
-				TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+				IClProxy.localTaskManager.getAll().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 			});
 			break;
 		}
 		case("remove"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
+				Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
 				while (iterator.hasNext()) {
 					if (iterator.next().name().equals(aTaskName))
 						iterator.remove();
@@ -55,9 +56,9 @@ public class CommandTask extends CommandBase {
 		case("show"): {
 			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
 				String info = "";
-				Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
+				Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
 				while (iterator.hasNext()) {
-					TaskEntry yetAnotherTask = iterator.next();
+					ITask yetAnotherTask = iterator.next();
 					if (yetAnotherTask.name().equals(aTaskName))
 						info = yetAnotherTask.description();
 				}
@@ -68,19 +69,18 @@ public class CommandTask extends CommandBase {
 		case("update"): {
 			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
 			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (TaskEntryLoader.localEntryList.contains(aTaskDesc)) {
-					Iterator<TaskEntry> iterator = TaskEntryLoader.localEntryList.iterator();
+				if (IClProxy.localTaskManager.getAll().contains(aTaskDesc)) {
+					Iterator<ITask> iterator = IClProxy.localTaskManager.getAll().iterator();
 					while (iterator.hasNext()) {
-						TaskEntry yetAnotherTask = iterator.next();
+						ITask yetAnotherTask = iterator.next();
 						if (yetAnotherTask.name().equals(aTaskName)) {
 							iterator.remove();
-							TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+							IClProxy.localTaskManager.getAll().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
 							break;
 						}
 					}
 				} else {
-					this.sendTextMessage(aSender, "Failed to find requested task entry, making new one instead.");
-					TaskEntryLoader.localEntryList.add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
+					this.sendTextMessage(aSender, "Failed to find requested task entry.");
 				}
 			});
 			break;
