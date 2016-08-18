@@ -3,6 +3,7 @@ package info.tritusk.ingamechecklist.client.handler;
 import java.util.Iterator;
 
 import info.tritusk.ingamechecklist.api.ITask;
+import info.tritusk.ingamechecklist.api.ITaskTranslatable;
 import info.tritusk.ingamechecklist.common.IClProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -38,10 +39,16 @@ public class HUDHandler {
 				ITask entry = iterator.next();
 				fontRenderer.drawString(entry.name(), posX, posY + posYOffset, 0xCCDDFF, true);
 				if (showDescription) {
-					for (String line : fontRenderer.listFormattedStringToWidth(entry.description(), 100)) {
-						posYOffset += 10;
-						fontRenderer.drawString(line, posX, posY + posYOffset, 0xCCDDFF, true);
-					}
+					if (entry instanceof ITaskTranslatable)
+						for (String line : fontRenderer.listFormattedStringToWidth(((ITaskTranslatable)entry).getTranslation(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode()), 100)) {
+							posYOffset += 10;
+							fontRenderer.drawString(line, posX, posY + posYOffset, 0xCCDDFF, true);
+						}
+					else
+						for (String line : fontRenderer.listFormattedStringToWidth(entry.description(), 100)) {
+							posYOffset += 10;
+							fontRenderer.drawString(line, posX, posY + posYOffset, 0xCCDDFF, true);
+						}
 				} else {
 					fontRenderer.drawString("[Press L to show more]", posX, posY + posYOffset + 10, 0xCCDDFF, true);
 				} 

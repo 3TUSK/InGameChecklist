@@ -35,17 +35,11 @@ public class TaskEntry implements ITaskTranslatable {
 	
 	@Override
 	public String getTranslation(String langCode) {
-		if ("".equals(description))
-			return "";
-		
-		if ("en_US".equals(langCode))
+		try {
+			return translation.get(langCode);
+		} catch (Exception e) {
 			return this.description();
-		else
-			try {
-				return translation.get(langCode);
-			} catch (Exception e) {
-				return this.description();
-			}
+		}
 	}
 	
 	@Override
