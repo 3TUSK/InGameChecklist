@@ -59,7 +59,7 @@ public class TaskEntryLoader implements ITaskManager {
 	public boolean loadFrom(InputStream input) {
 		try {
 			Document xmlDoc = reader.parse(input);
-			Node mainNode = xmlDoc.getElementsByTagName("LocalChecklist").item(0);
+			Node mainNode = xmlDoc.getElementsByTagName("checklist").item(0);
 			NodeList checklist = ((Element) mainNode).getElementsByTagName("task");
 			for (int n = 0; n < checklist.getLength(); n++) {
 				try {
@@ -93,7 +93,7 @@ public class TaskEntryLoader implements ITaskManager {
 	public boolean saveTo(final File file) {
 		try {
 			Document xmlDoc = reader.newDocument();
-			Element main = xmlDoc.createElement("LocalChecklist");
+			Element main = xmlDoc.createElement("checklist");
 			for (ITask task : localEntryList) {
 				Element aTask = xmlDoc.createElement("task");
 				aTask.setAttribute("name", task.name());
