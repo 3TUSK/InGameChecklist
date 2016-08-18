@@ -54,5 +54,10 @@ public class TaskEntry implements ITaskTranslatable {
 		this.translation.put(langCode, translation);
 		return this;
 	}
+	
+	@Override
+	public Map<String, String> getAllTranslations() {
+		return translation;
+	}
 
 }

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +23,7 @@ import org.w3c.dom.NodeList;
 
 import info.tritusk.ingamechecklist.api.ITask;
 import info.tritusk.ingamechecklist.api.ITaskManager;
+import info.tritusk.ingamechecklist.api.ITaskTranslatable;
 import info.tritusk.ingamechecklist.common.IClProxy;
 
 public class TaskEntryLoader implements ITaskManager {
@@ -96,6 +98,16 @@ public class TaskEntryLoader implements ITaskManager {
 				Element aTask = xmlDoc.createElement("task");
 				aTask.setAttribute("name", task.name());
 				aTask.setTextContent(task.description());
+				if (aTask instanceof ITaskTranslatable) {
+					aTask.setAttribute("enablei18n", "true");
+					Map<String, String> i18nMap = ((ITaskTranslatable)aTask).getAllTranslations();
+					for (Map.Entry<String, String> i18nEntry : i18nMap.entrySet()) {
+						Element aTranslation = xmlDoc.createElement("i18n");
+						aTranslation.setAttribute("code", i18nEntry.getKey());
+						aTranslation.setTextContent(i18nEntry.getValue());
+						aTask.appendChild(aTranslation);
+					}
+				}
 				main.appendChild(aTask);
 			}
 			xmlDoc.appendChild(main);
