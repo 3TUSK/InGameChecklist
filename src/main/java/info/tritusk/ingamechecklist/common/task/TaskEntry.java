@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import info.tritusk.ingamechecklist.api.ITask;
+import info.tritusk.ingamechecklist.api.ITaskTranslatable;
 
-public class TaskEntry implements ITask {
+public class TaskEntry implements ITaskTranslatable {
 	
 	private final String name;
 	private final String description;
@@ -23,15 +23,18 @@ public class TaskEntry implements ITask {
 		this.description = description;
 	}
 	
+	@Override
 	public String name() {
 		return this.name;
 	}
 	
+	@Override
 	public String description() {
 		return this.description;
 	}
 	
-	public String getDescription(String langCode) {
+	@Override
+	public String getTranslation(String langCode) {
 		if ("".equals(description))
 			return "";
 		
@@ -45,7 +48,8 @@ public class TaskEntry implements ITask {
 			}
 	}
 	
-	public TaskEntry setTranslation(String langCode, String translation) {
+	@Override
+	public ITaskTranslatable setTranslation(String langCode, String translation) {
 		if ("".equals(this.description))
 			return this;
 		
