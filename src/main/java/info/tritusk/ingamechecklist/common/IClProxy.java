@@ -3,6 +3,8 @@ package info.tritusk.ingamechecklist.common;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
@@ -11,7 +13,6 @@ import info.tritusk.ingamechecklist.api.ITaskManager;
 import info.tritusk.ingamechecklist.api.TaskManager;
 import info.tritusk.ingamechecklist.common.command.CommandTask;
 import info.tritusk.ingamechecklist.common.config.ConfigMain;
-import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -24,15 +25,25 @@ public class IClProxy {
 	public static Logger log;
 	
 	@TaskManager(name = "InGameChecklist-Local")
-	public static ITaskManager localTaskManager = new TaskEntryLoader();
+	public static ITaskManager localTaskManager;
+	
+	public static Map<String, ITaskManager> managers = new LinkedHashMap<>();
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
+		
 		ASMDataTable asmData = event.getAsmData();
 		Set<ASMDataTable.ASMData> allManagers = asmData.getAll(TaskManager.class.getCanonicalName());
 		for (ASMDataTable.ASMData data : allManagers) {
-			data.getObjectName();
+			try {
+				ITaskManager manager = (ITaskManager) Class.forName(data.getClassName()).getDeclaredField(data.getObjectName()).get(null);
+				managers.put(String.valueOf(data.getAnnotationInfo().get("name")), manager);
+			} catch (Exception e) {
+				log.error("Something went wrong when loading a task manager.");
+				e.printStackTrace();
+			}
 		}
+		
 		File mainDir = new File(event.getModConfigurationDirectory(), "CustomChecklist");
 		if (!mainDir.exists() || !mainDir.isDirectory())
 			mainDir.mkdir();
