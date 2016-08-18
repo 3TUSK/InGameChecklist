@@ -62,9 +62,19 @@ public class TaskEntryLoader implements ITaskManager {
 			for (int n = 0; n < checklist.getLength(); n++) {
 				try {
 					Node aTask = checklist.item(n);
+					boolean enableI18n = Boolean.parseBoolean(((Element)aTask).getAttribute("enablei18n"));
 					String taskName = ((Element)aTask).getAttribute("name");
 					String taskDesc = ((Element)aTask).getTextContent();
-					localEntryList.add(new TaskEntry(taskName, taskDesc));
+					TaskEntry entry = new TaskEntry(taskName, taskDesc);
+					if (enableI18n) {
+						NodeList translations = ((Element)aTask).getElementsByTagName("i18n");
+						for (int o = 0; o < translations.getLength(); o++) {
+							Node aTranslation = translations.item(o);
+							entry.setTranslation(((Element)aTranslation).getAttribute("code"), ((Element)aTranslation).getTextContent());
+						}
+					}
+					
+					localEntryList.add(entry);
 				} catch (Exception e) {
 					IClProxy.log.error("Error occured when append a new task.");
 				}
