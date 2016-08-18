@@ -59,7 +59,7 @@ public class IClProxy {
 	}
 	
 	public void onServerStopping(FMLServerStoppingEvent event) {
-		localTaskManager.save(localTaskManager.getAll());
+		localTaskManager.saveTo(ConfigMain.globalTasks);
 	}
 
 }

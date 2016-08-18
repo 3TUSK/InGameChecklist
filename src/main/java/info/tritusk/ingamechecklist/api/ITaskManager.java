@@ -1,5 +1,6 @@
 package info.tritusk.ingamechecklist.api;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 
@@ -7,10 +8,12 @@ public interface ITaskManager {
 	
 	boolean init();
 	
-	boolean loadFrom(InputStream input);
+	boolean isInitialized();
 	
-	boolean save(Collection<ITask> tasks);
+	boolean loadFrom(final InputStream input);
 	
-	Collection<ITask> getAll();
+	boolean saveTo(final File file);
+	
+	Collection<ITask> getTasks();
 
 }

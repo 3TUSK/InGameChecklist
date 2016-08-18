@@ -1,5 +1,6 @@
 package info.tritusk.ingamechecklist.common.task;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ import org.w3c.dom.NodeList;
 import info.tritusk.ingamechecklist.api.ITask;
 import info.tritusk.ingamechecklist.api.ITaskManager;
 import info.tritusk.ingamechecklist.common.IClProxy;
-import info.tritusk.ingamechecklist.common.config.ConfigMain;
 
 public class TaskEntryLoader implements ITaskManager {
 	
@@ -36,14 +36,21 @@ public class TaskEntryLoader implements ITaskManager {
 	@Override
 	public boolean init() {
 		try {
-			reader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			writer = TransformerFactory.newInstance().newTransformer();
+			if (!xmlHandlerInitialized) {
+				reader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				writer = TransformerFactory.newInstance().newTransformer();
+			}
 			xmlHandlerInitialized = reader != null && writer != null;
 			return xmlHandlerInitialized;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean isInitialized() {
+		return xmlHandlerInitialized;
 	}
 	
 	@Override
@@ -71,11 +78,11 @@ public class TaskEntryLoader implements ITaskManager {
 	}
 	
 	@Override
-	public boolean save(Collection<ITask> tasks) {
+	public boolean saveTo(final File file) {
 		try {
 			Document xmlDoc = reader.newDocument();
 			Element main = xmlDoc.createElement("LocalChecklist");
-			for (ITask task : tasks) {
+			for (ITask task : localEntryList) {
 				Element aTask = xmlDoc.createElement("task");
 				aTask.setAttribute("name", task.name());
 				aTask.setTextContent(task.description());
@@ -85,9 +92,9 @@ public class TaskEntryLoader implements ITaskManager {
 			writer.setOutputProperty(OutputKeys.INDENT, "yes");
 			writer.setOutputProperty(OutputKeys.METHOD, "xml");
 			writer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			ConfigMain.globalTasks.delete();
-			ConfigMain.globalTasks.createNewFile();
-			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(ConfigMain.globalTasks)));
+			file.delete();
+			file.createNewFile();
+			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(file)));
 			IClProxy.log.info("Successfully saved local checklist.");
 			return true;
 		} catch (Exception e) {
@@ -97,7 +104,7 @@ public class TaskEntryLoader implements ITaskManager {
 		}
 	}
 	
-	public Collection<ITask> getAll() {
+	public Collection<ITask> getTasks() {
 		return localEntryList;
 	}
 
