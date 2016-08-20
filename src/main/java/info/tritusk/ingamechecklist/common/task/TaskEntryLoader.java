@@ -61,30 +61,40 @@ public class TaskEntryLoader implements ITaskManager {
 			Document xmlDoc = reader.parse(input);
 			Node mainNode = xmlDoc.getElementsByTagName("checklist").item(0);
 			NodeList checklist = ((Element) mainNode).getElementsByTagName("task");
-			for (int n = 0; n < checklist.getLength(); n++) {
-				try {
-					Node aTask = checklist.item(n);
-					boolean enableI18n = Boolean.parseBoolean(((Element)aTask).getAttribute("enablei18n"));
-					String taskName = ((Element)aTask).getAttribute("name");
-					String taskDesc = ((Element)aTask).getTextContent();
-					TaskEntry entry = new TaskEntry(taskName, taskDesc);
-					if (enableI18n) {
-						NodeList translations = ((Element)aTask).getElementsByTagName("i18n");
-						for (int o = 0; o < translations.getLength(); o++) {
-							Node aTranslation = translations.item(o);
-							entry.setTranslation(((Element)aTranslation).getAttribute("code"), ((Element)aTranslation).getTextContent());
+			final int taskNumber = checklist.getLength();
+			if (taskNumber > 0) {
+				for (int n = 0; n < taskNumber; n++) {
+					try {
+						Node aTask = checklist.item(n);
+						boolean enableI18n = Boolean.parseBoolean(((Element)aTask).getAttribute("enablei18n"));
+						String taskName = ((Element)aTask).getAttribute("name");
+						String taskDesc = ((Element)aTask).getTextContent();
+						ITask entry;
+						if (enableI18n) {
+							entry = new TaskEntryTranslatable(taskName, taskDesc);
+							NodeList translations = ((Element)aTask).getElementsByTagName("i18n");
+							final int l = translations.getLength();
+							if (l > 0) {
+								for (int o = 0; o < l; o++) {
+									Node aTranslation = translations.item(o);
+									((TaskEntryTranslatable)entry).setTranslation(((Element)aTranslation).getAttribute("code"), ((Element)aTranslation).getTextContent());
+								}
+							}
+						} else {
+							entry = new TaskEntry(taskName, taskDesc);
 						}
+						
+						localEntryList.add(entry);
+					} catch (Exception e) {
+						IClProxy.log.error("Error occured when append a new task.");
 					}
-					
-					localEntryList.add(entry);
-				} catch (Exception e) {
-					IClProxy.log.error("Error occured when append a new task.");
 				}
 			}
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("Error occured when loading checklist.");
 			IClProxy.log.error("Please double check your checklist file, make sure that everything matches standard.");
+			e.printStackTrace();
 			return false;
 		}
 	}
