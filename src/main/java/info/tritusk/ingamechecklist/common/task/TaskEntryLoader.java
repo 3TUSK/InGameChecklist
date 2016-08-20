@@ -3,7 +3,7 @@ package info.tritusk.ingamechecklist.common.task;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class TaskEntryLoader implements ITaskManager {
 	public static DocumentBuilder reader;
 	public static Transformer writer;
 	
-	private List<ITask> localEntryList = new ArrayList<>();
+	private List<ITask> localEntryList = new LinkedList<>();
 	
 	private boolean xmlHandlerInitialized = false;
 	
