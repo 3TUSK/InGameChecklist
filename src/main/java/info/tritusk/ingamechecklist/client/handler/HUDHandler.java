@@ -35,7 +35,7 @@ public class HUDHandler {
 			
 			int posYOffset = 40;
 			Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
-			for (int i = 0; i < 3; i++) {
+			while (iterator.hasNext()) {
 				ITask entry = iterator.next();
 				fontRenderer.drawString(entry.name(), posX, posY + posYOffset, 0xCCDDFF, true);
 				if (showDescription) {
