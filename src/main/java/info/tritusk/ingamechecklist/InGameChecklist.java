@@ -2,8 +2,6 @@ package info.tritusk.ingamechecklist;
 
 import info.tritusk.ingamechecklist.common.IClProxy;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -11,37 +9,36 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = "InGameChecklist", name = "In-Game Checklist", version = "@VERSION@", useMetadata = true, clientSideOnly = true)
+@Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", useMetadata = true, clientSideOnly = true)
 public class InGameChecklist {
 	
-	@Instance("InGameChecklist")
+	@Mod.Instance("ingame_checklist")
 	public InGameChecklist instance;
 	
 	@SidedProxy(serverSide = "info.tritusk.ingamechecklist.common.IClProxy", clientSide = "info.tritusk.ingamechecklist.client.IClProxyClient")
 	public static IClProxy proxy;
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		this.instance = this;
 		proxy.preInit(event);
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		proxy.init(event);
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void onServerStart(FMLServerStartingEvent event) {
 		proxy.onServerStarting(event);
 	}
 	
-	@EventHandler
+	@Mod.EventHandler
 	public void onServerStop(FMLServerStoppingEvent event) {
 		proxy.onServerStopping(event);
 	}

@@ -22,10 +22,10 @@ public class IClProxy {
 	
 	public static Logger log;
 	
-	@TaskManager(name = "InGameChecklist-Local")
+	@TaskManager("InGameChecklist-Local")
 	public static ITaskManager localTaskManager = new TaskEntryLoader();
 	
-	@TaskManager(name = "InGameChecklist-Remote")
+	@TaskManager("InGameChecklist-Remote")
 	public static ITaskManager remoteTaskManager = new TaskEntryLoader();
 	
 	public void preInit(FMLPreInitializationEvent event) {
@@ -64,11 +64,11 @@ public class IClProxy {
 		try {
 			localTaskManager.init();
 			localTaskManager.loadFrom(new FileInputStream(IClConfig.localTasks));
+			log.info("Loaded local checklist.");
 		} catch (Exception e) {
 			log.error("Something went extremely wrong...");
 			e.printStackTrace();
 		}
-		log.info("Loaded local checklist.");
 	}
 	
 	public void onServerStopping(FMLServerStoppingEvent event) {

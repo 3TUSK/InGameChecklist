@@ -20,10 +20,7 @@ public class HUDHandler {
 
 	@SubscribeEvent
 	public void onRenderingScreen(RenderGameOverlayEvent.Post event) {
-		if (event.getType() == ElementType.DEBUG)
-			return;
-		
-		if (event.getType() == ElementType.CHAT) {
+		if (event.getType() == ElementType.ALL) {
 			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
 			Gui.drawRect(posX - 5, posY - 5, posX + 105, posY + 125, 1342177280);
