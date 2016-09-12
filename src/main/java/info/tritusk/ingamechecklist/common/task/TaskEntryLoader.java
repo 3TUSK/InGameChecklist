@@ -3,7 +3,7 @@ package info.tritusk.ingamechecklist.common.task;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class TaskEntryLoader implements ITaskManager {
 	public static DocumentBuilder reader;
 	public static Transformer writer;
 	
-	private List<ITask> localEntryList = new LinkedList<>();
+	private List<ITask> localEntryList = new ArrayList<>();
 	
 	private boolean xmlHandlerInitialized = false;
 	
@@ -128,6 +128,7 @@ public class TaskEntryLoader implements ITaskManager {
 			file.createNewFile();
 			writer.transform(new DOMSource(xmlDoc), new StreamResult(new FileOutputStream(file)));
 			IClProxy.log.info("Successfully saved local checklist.");
+			localEntryList.clear();
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("An error occured when trying to save the local checklist file.");

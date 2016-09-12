@@ -29,18 +29,18 @@ public class TaskEntryTranslatable extends TaskEntry implements ITaskTranslatabl
 	@Override
 	public ITaskTranslatable setTranslation(String langCode, String translation) {
 		if ("".equals(this.description))
-			throw new IllegalArgumentException("No, String with length of 0 is not allowed");
+			throw new IllegalArgumentException("No, empty language code is not allowed");
 		
 		if ("en_US".equals(langCode))
 			throw new IllegalArgumentException("Sorry but American English is the language used for fallback!");
 		
-		this.translation.put(langCode, translation);
+		this.translation.putIfAbsent(langCode, translation);
 		return this;
 	}
 	
 	@Override
 	public Map<String, String> getAllTranslations() {
-		return translation;
+		return new HashMap<>(translation);
 	}
 
 }
