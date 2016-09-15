@@ -1,6 +1,5 @@
 package info.tritusk.ingamechecklist.common.command;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import info.tritusk.ingamechecklist.api.ITask;
@@ -11,9 +10,60 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.server.command.CommandTreeBase;
 
-public class CommandTask extends CommandBase {
+public class CommandTask extends CommandTreeBase {
 
+	public CommandTask() {
+		this.addSubcommand("add", "", (aSender, aTaskName, aTaskDesc) -> {
+			if (IClProxy.localTaskManager.getTasks().contains(aTaskName)) {
+				this.sendTextMessage(aSender, "Task with same name is disallowed!");
+				return;
+			}
+			IClProxy.localTaskManager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
+		});
+		this.addSubcommand("remove", "", (aSender, aTaskName, aTaskDesc) -> {
+			Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+			while (iterator.hasNext()) {
+				if (iterator.next().name().equals(aTaskName))
+					iterator.remove();
+			}
+		});
+		this.addSubcommand("show", "", (aSender, aTaskName, aTaskDesc) -> {
+			String info = "";
+			Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+			while (iterator.hasNext()) {
+				ITask yetAnotherTask = iterator.next();
+				if (yetAnotherTask.name().equals(aTaskName))
+					info = yetAnotherTask.description();
+			}
+			this.sendTextMessage(aSender, info);
+		});
+		this.addSubcommand("update", "", (aSender, aTaskName, aTaskDesc) -> {
+			if (IClProxy.localTaskManager.getTasks().contains(aTaskDesc)) {
+				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+				while (iterator.hasNext()) {
+					ITask yetAnotherTask = iterator.next();
+					if (yetAnotherTask.name().equals(aTaskName)) {
+						iterator.remove();
+						IClProxy.localTaskManager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
+						break;
+					}
+				}
+			} else {
+				this.sendTextMessage(aSender, "Failed to find requested task entry.");
+			}
+		});
+		this.addSubcommand("help", "", (aSender, aTaskName, aTaskDesc) -> {
+			this.sendTextMessage(aSender, this.getCommandUsage(aSender));
+			this.sendTextMessage(aSender, "    " + "help: Show this help");
+			this.sendTextMessage(aSender, "    " + "add: Add a new task to checklist");
+			this.sendTextMessage(aSender, "    " + "remove: Remove an existed task from checklist");
+			this.sendTextMessage(aSender, "    " + "show: Show description of a task");
+			this.sendTextMessage(aSender, "    " + "update: Update the description for an existed task");
+		});
+	}
+	
 	@Override
 	public String getCommandName() {
 		return "checklist";
@@ -22,89 +72,6 @@ public class CommandTask extends CommandBase {
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
 		return "/checklist <help|add|remove|show|update> [task] [task description]";
-	}
-
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (args == null || args.length == 0) {
-			this.showHelpMessage(sender);
-			return;
-		}
-		String taskName = args[1];
-		switch (args[0]) {
-		case("add"): {
-			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
-			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (IClProxy.localTaskManager.getTasks().contains(aTaskName)) {
-						this.sendTextMessage(aSender, "Task with same name is disallowed!");
-						return;
-				}
-				IClProxy.localTaskManager.getTasks().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
-			});
-			break;
-		}
-		case("remove"): {
-			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
-				while (iterator.hasNext()) {
-					if (iterator.next().name().equals(aTaskName))
-						iterator.remove();
-				}
-			});
-			break;
-		}
-		case("show"): {
-			this.execute0(sender, taskName, null, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				String info = "";
-				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
-				while (iterator.hasNext()) {
-					ITask yetAnotherTask = iterator.next();
-					if (yetAnotherTask.name().equals(aTaskName))
-						info = yetAnotherTask.description();
-				}
-				this.sendTextMessage(aSender, info);
-			});
-			break;
-		}
-		case("update"): {
-			String[] taskDesc = Arrays.copyOfRange(args, 2, args.length);
-			this.execute0(sender, taskName, taskDesc, (ICommandSender aSender, String aTaskName, String[] aTaskDesc) -> {
-				if (IClProxy.localTaskManager.getTasks().contains(aTaskDesc)) {
-					Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
-					while (iterator.hasNext()) {
-						ITask yetAnotherTask = iterator.next();
-						if (yetAnotherTask.name().equals(aTaskName)) {
-							iterator.remove();
-							IClProxy.localTaskManager.getTasks().add(new TaskEntry(taskName, this.stringArrayToString(aTaskDesc)));
-							break;
-						}
-					}
-				} else {
-					this.sendTextMessage(aSender, "Failed to find requested task entry.");
-				}
-			});
-			break;
-		}
-		case("help"): {
-			this.showHelpMessage(sender);
-			break;
-		}
-		default:
-			throw new CommandException("Invalid parameter, please double check.");
-		}
-	}
-	
-	private void execute0(ICommandSender sender, String taskName, String[] taskDesc, ITaskCommandLogic logic) throws CommandException {
-		logic.execute(sender, taskName, taskDesc);
-	}
-	
-	private void showHelpMessage(ICommandSender sender) {
-		this.sendTextMessage(sender, this.getCommandUsage(sender));
-		this.sendTextMessage(sender, "    " + "help: Show this help");
-		this.sendTextMessage(sender, "    " + "add: Add a new task to checklist");
-		this.sendTextMessage(sender, "    " + "remove: Remove an existed task from checklist");
-		this.sendTextMessage(sender, "    " + "show: Show description of a task");
-		this.sendTextMessage(sender, "    " + "update: Update the description for an existed task");
 	}
 	
 	private void sendTextMessage(ICommandSender sender, String message) {
@@ -117,6 +84,28 @@ public class CommandTask extends CommandBase {
 			builder.append(str).append(' ');
 		}
 		return builder.toString();
+	}
+	
+	public void addSubcommand(final String name, final String usage, final ITaskCommandLogic logic) {
+		this.addSubcommand(new CommandBase() {
+			@Override
+			public String getCommandName() {
+				return name;
+			}
+			@Override
+			public String getCommandUsage(ICommandSender sender) {
+				return usage;
+			}
+			@Override
+			public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+				final int l = args.length;
+				if (l < 1)
+					throw new CommandException("Insufficent arguments");
+				String[] subArgs = new String[args.length - 1];
+				System.arraycopy(args, 1, subArgs, 0, args.length);
+				logic.execute(sender, args[0], subArgs);
+			}
+		});
 	}
 	
 	public static interface ITaskCommandLogic {
