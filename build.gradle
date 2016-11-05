@@ -13,17 +13,17 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "0.0.2"
-group= "info.tritusk.ingamechecklist"
+group = "info.tritusk.ingamechecklist"
 archivesBaseName = "InGameChecklist"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.10.2-12.18.1.2087"
+    version = "1.10.2-12.18.2.2118"
     runDir = "run"
     
-    mappings = "snapshot_20160826"
+    mappings = "snapshot_20161102"
     
     replace "@IGC_VERSION", project.version
 }

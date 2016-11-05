@@ -9,11 +9,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", /*dependencies = "required-after:forge@[12.18.1.2087,)",*/ useMetadata = true, clientSideOnly = true)
+@Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", dependencies = "required-after:Forge@[12.18.2.2104,)", useMetadata = true, clientSideOnly = true)
 public class InGameChecklist {
 	
 	@Mod.Instance("ingame_checklist")
-	public InGameChecklist instance;
+	public static InGameChecklist instance;
 	
 	@SidedProxy(serverSide = "info.tritusk.ingamechecklist.common.IClProxy", clientSide = "info.tritusk.ingamechecklist.client.IClProxyClient")
 	public static IClProxy proxy;
