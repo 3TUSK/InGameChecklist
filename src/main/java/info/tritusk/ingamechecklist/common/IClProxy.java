@@ -6,11 +6,10 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import info.tritusk.ingamechecklist.api.API;
 import info.tritusk.ingamechecklist.api.ITaskManager;
-import info.tritusk.ingamechecklist.api.TaskManager;
+import info.tritusk.ingamechecklist.api.TaskManagerGetter;
 import info.tritusk.ingamechecklist.common.command.CommandTask;
-import info.tritusk.ingamechecklist.common.task.TaskEntryLoader;
+import info.tritusk.ingamechecklist.common.task.TaskEntryManager;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -21,23 +20,19 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 public class IClProxy {
 	
 	public static Logger log;
-	
-	@TaskManager("InGameChecklist-Local")
-	public static ITaskManager localTaskManager = new TaskEntryLoader();
-	
-	@TaskManager("InGameChecklist-Remote")
-	public static ITaskManager remoteTaskManager = new TaskEntryLoader();
+
+	public static ITaskManager manager = new TaskEntryManager();
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
 		
 		ASMDataTable asmData = event.getAsmData();
-		Set<ASMDataTable.ASMData> allManagers = asmData.getAll(TaskManager.class.getCanonicalName());
+		Set<ASMDataTable.ASMData> allManagers = asmData.getAll(TaskManagerGetter.class.getCanonicalName());
 		for (ASMDataTable.ASMData data : allManagers) {
 			try {
-				ITaskManager manager = (ITaskManager) Class.forName(data.getClassName()).getDeclaredField(data.getObjectName()).get(null);
-				API.INSTANCE.register(String.valueOf(data.getAnnotationInfo().get("name")), manager);
-				log.info("Loaded manager: {}", String.valueOf(data.getAnnotationInfo().get("name")));
+				System.out.println(data.getClassName());
+				System.out.println(data.getObjectName());
+				System.out.println(data.getAnnotationName());
 			} catch (Exception e) {
 				log.error("Something went wrong when loading a task manager.");
 				e.printStackTrace();
@@ -62,8 +57,8 @@ public class IClProxy {
 	public void onServerStarting(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandTask());
 		try {
-			localTaskManager.init();
-			localTaskManager.loadFrom(new FileInputStream(IClConfig.localTasks));
+			manager.init();
+			manager.loadFrom(new FileInputStream(IClConfig.localTasks));
 			log.info("Loaded local checklist.");
 		} catch (Exception e) {
 			log.error("Something went extremely wrong...");
@@ -72,7 +67,7 @@ public class IClProxy {
 	}
 	
 	public void onServerStopping(FMLServerStoppingEvent event) {
-		localTaskManager.saveTo(IClConfig.localTasks);
+		manager.saveTo(IClConfig.localTasks);
 	}
 
 }

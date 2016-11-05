@@ -8,9 +8,5 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface TaskManager {
-	
-	String value();
-
-}
+@Target(ElementType.METHOD)
+public @interface TaskManagerGetter {}

@@ -16,14 +16,14 @@ public class CommandTask extends CommandTreeBase {
 
 	public CommandTask() {
 		this.addSubcommand("add", "", (aSender, aTaskName, aTaskDesc) -> {
-			if (IClProxy.localTaskManager.getTasks().contains(aTaskName)) {
+			if (IClProxy.manager.getTasks().contains(aTaskName)) {
 				this.sendTextMessage(aSender, "Task with same name is disallowed!");
 				return;
 			}
-			IClProxy.localTaskManager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
+			IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
 		});
 		this.addSubcommand("remove", "", (aSender, aTaskName, aTaskDesc) -> {
-			Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
 			while (iterator.hasNext()) {
 				if (iterator.next().name().equals(aTaskName))
 					iterator.remove();
@@ -31,7 +31,7 @@ public class CommandTask extends CommandTreeBase {
 		});
 		this.addSubcommand("show", "", (aSender, aTaskName, aTaskDesc) -> {
 			String info = "";
-			Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
 			while (iterator.hasNext()) {
 				ITask yetAnotherTask = iterator.next();
 				if (yetAnotherTask.name().equals(aTaskName))
@@ -40,13 +40,13 @@ public class CommandTask extends CommandTreeBase {
 			this.sendTextMessage(aSender, info);
 		});
 		this.addSubcommand("update", "", (aSender, aTaskName, aTaskDesc) -> {
-			if (IClProxy.localTaskManager.getTasks().contains(aTaskDesc)) {
-				Iterator<ITask> iterator = IClProxy.localTaskManager.getTasks().iterator();
+			if (IClProxy.manager.getTasks().contains(aTaskDesc)) {
+				Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
 				while (iterator.hasNext()) {
 					ITask yetAnotherTask = iterator.next();
 					if (yetAnotherTask.name().equals(aTaskName)) {
 						iterator.remove();
-						IClProxy.localTaskManager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
+						IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
 						break;
 					}
 				}
