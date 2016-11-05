@@ -2,15 +2,14 @@ package info.tritusk.ingamechecklist.common;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.Logger;
 
 import info.tritusk.ingamechecklist.api.ITaskManager;
-import info.tritusk.ingamechecklist.api.TaskManagerGetter;
 import info.tritusk.ingamechecklist.common.command.CommandTask;
 import info.tritusk.ingamechecklist.common.task.TaskEntryManager;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -19,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 public class IClProxy {
 	
+	@Nonnull
 	public static Logger log;
 
 	public static ITaskManager manager = new TaskEntryManager();
@@ -26,18 +26,7 @@ public class IClProxy {
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
 		
-		ASMDataTable asmData = event.getAsmData();
-		Set<ASMDataTable.ASMData> allManagers = asmData.getAll(TaskManagerGetter.class.getCanonicalName());
-		for (ASMDataTable.ASMData data : allManagers) {
-			try {
-				System.out.println(data.getClassName());
-				System.out.println(data.getObjectName());
-				System.out.println(data.getAnnotationName());
-			} catch (Exception e) {
-				log.error("Something went wrong when loading a task manager.");
-				e.printStackTrace();
-			}
-		}
+		IClInterModManager.INSTANCE.retriveTaskManagerRequest(event.getAsmData());
 		
 		File mainDir = new File(event.getModConfigurationDirectory(), "InGameChecklist");
 		if (!mainDir.exists() || !mainDir.isDirectory())

@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import info.tritusk.ingamechecklist.common.IClProxy;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Config;
 
 public final class IClConfig {
 	
@@ -17,6 +17,21 @@ public final class IClConfig {
 		DISABLE
 	}
 	
+	@Config(modid = "ingame_checklist", name = "InGameChecklist", type = Config.Type.INSTANCE)
+	public static class Options {
+		@Config.Comment("Set to true to enable remote tasks retrival")
+		@Config.LangKey("ingame_checklist.config.remoteTasksRetrive")
+		public static boolean enableRemoteTasksRetrive;
+		
+		@Config.Comment("The url that points to remote tasks file")
+		@Config.LangKey("ingame_checklist.config.remoteTasksURL")
+		public static String remoteTaskURL;
+		
+		@Config.Comment("Merging policy that will apply when retriving remote tasks. Has no effect when remote retival is disabled")
+		@Config.LangKey("ingame_checklist.config.mergePolicy")
+		public static String mergePolicy;
+	}
+	
 	public static MergePolicy policy;
 	
 	public static File localTasks;
@@ -24,21 +39,15 @@ public final class IClConfig {
 	public static InputStream remoteTasks;
 	
 	public static void initConfig(File file) {
-		Configuration config = new Configuration(file);
-		
-		config.load();
-		
-		String urlString = config.getString("RemoteTaskList", "Remote", "", "Fill this with a url to let InGameChecklist download task file from other server.");
-		
-		policy = MergePolicy.valueOf(config.getString("TaskOverridePolicy", "Remote", "DISABLE", "Decide how to deal with remote tasks. Merge = merge into local tasks; Override = Only remote tasks will present; Disable = Only local tasks will present.").toUpperCase());
+		policy = MergePolicy.valueOf(Options.mergePolicy);
 		if (policy == null)
 			policy = MergePolicy.DISABLE;
 		
-		if (urlString != null && !urlString.equals("")) {
+		if (Options.remoteTaskURL != null && !Options.remoteTaskURL.equals("")) {
 			new Thread(() -> {
 				try {
-					remoteTasks = new URL(urlString).openConnection().getInputStream();
-					remoteTasksDump = new File(file.getParentFile(), urlString);
+					remoteTasks = new URL(Options.remoteTaskURL).openConnection().getInputStream();
+					remoteTasksDump = new File(file.getParentFile(), Options.remoteTaskURL);
 				} catch (MalformedURLException e) {
 					IClProxy.log.error("The input url is wrongly formatted!");
 				} catch (IOException e) {
@@ -47,9 +56,6 @@ public final class IClConfig {
 				}
 			}).start();
 		}
-		
-		if (config.hasChanged())
-			config.save();
 	}
 	
 	public static void initLocalTasks(File file) {
