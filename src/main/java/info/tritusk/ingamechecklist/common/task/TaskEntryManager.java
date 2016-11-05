@@ -97,8 +97,6 @@ public class TaskEntryManager implements ITaskManager {
 				main.appendChild(aTask);
 			});
 			xmlFile.replaceChild(main, xmlFile.getElementsByTagName("checklist").item(0));
-			file.delete();
-			file.createNewFile();
 			writer.transform(new DOMSource(xmlFile), new StreamResult(new FileOutputStream(file, false)));
 			IClProxy.log.info("Successfully saved local checklist.");
 			localEntryList.clear();
