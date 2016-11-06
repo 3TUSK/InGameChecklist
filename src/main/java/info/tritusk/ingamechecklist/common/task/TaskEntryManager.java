@@ -120,7 +120,8 @@ public class TaskEntryManager implements ITaskManager {
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("An error occured when trying to save the local checklist file.");
-			e.printStackTrace();
+			if (IClConfig.Options.debug)
+				e.printStackTrace();
 			return false;
 		}
 	}

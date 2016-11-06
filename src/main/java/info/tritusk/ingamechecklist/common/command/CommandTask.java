@@ -67,9 +67,6 @@ public class CommandTask extends CommandTreeBase {
 			}
 			@Override
 			public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-				final int l = args.length;
-				if (l < 1)
-					throw new CommandException("Insufficent arguments");
 				String[] subArgs = new String[args.length - 1];
 				System.arraycopy(args, 1, subArgs, 0, args.length);
 				logic.execute(sender, args[0], subArgs);
