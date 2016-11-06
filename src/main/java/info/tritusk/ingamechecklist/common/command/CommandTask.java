@@ -15,20 +15,8 @@ import net.minecraftforge.server.command.CommandTreeBase;
 public class CommandTask extends CommandTreeBase {
 
 	public CommandTask() {
-		this.addSubcommand("add", "", (aSender, aTaskName, aTaskDesc) -> {
-			if (IClProxy.manager.getTasks().contains(aTaskName)) {
-				this.sendTextMessage(aSender, "Task with same name is disallowed!");
-				return;
-			}
-			IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
-		});
-		this.addSubcommand("remove", "", (aSender, aTaskName, aTaskDesc) -> {
-			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
-			while (iterator.hasNext()) {
-				if (iterator.next().name().equals(aTaskName))
-					iterator.remove();
-			}
-		});
+		this.addSubcommand("add", "", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0))));
+		this.addSubcommand("remove", "", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName)));
 		this.addSubcommand("show", "", (aSender, aTaskName, aTaskDesc) -> {
 			String info = "";
 			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
@@ -40,19 +28,8 @@ public class CommandTask extends CommandTreeBase {
 			this.sendTextMessage(aSender, info);
 		});
 		this.addSubcommand("update", "", (aSender, aTaskName, aTaskDesc) -> {
-			if (IClProxy.manager.getTasks().contains(aTaskDesc)) {
-				Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
-				while (iterator.hasNext()) {
-					ITask yetAnotherTask = iterator.next();
-					if (yetAnotherTask.name().equals(aTaskName)) {
-						iterator.remove();
-						IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, this.stringArrayToString(aTaskDesc)));
-						break;
-					}
-				}
-			} else {
-				this.sendTextMessage(aSender, "Failed to find requested task entry.");
-			}
+			IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName));
+			IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
 		});
 		this.addSubcommand("help", "", (aSender, aTaskName, aTaskDesc) -> {
 			this.sendTextMessage(aSender, this.getCommandUsage(aSender));
@@ -76,14 +53,6 @@ public class CommandTask extends CommandTreeBase {
 	
 	private void sendTextMessage(ICommandSender sender, String message) {
 		sender.addChatMessage(new TextComponentString(message));
-	}
-	
-	private String stringArrayToString(String[] array) {
-		StringBuilder builder = new StringBuilder();
-		for (String str : array) {
-			builder.append(str).append(' ');
-		}
-		return builder.toString();
 	}
 	
 	public void addSubcommand(final String name, final String usage, final ITaskCommandLogic logic) {
