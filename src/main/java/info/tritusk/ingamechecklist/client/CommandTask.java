@@ -1,4 +1,4 @@
-package info.tritusk.ingamechecklist.common.command;
+package info.tritusk.ingamechecklist.client;
 
 import info.tritusk.ingamechecklist.api.ITask;
 import info.tritusk.ingamechecklist.client.handler.HUDHandler;

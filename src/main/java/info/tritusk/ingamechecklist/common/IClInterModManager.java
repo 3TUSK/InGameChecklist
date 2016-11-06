@@ -29,7 +29,8 @@ public enum IClInterModManager {
 				method.invoke(null, IClProxy.manager);
 			} catch (Exception e) {
 				IClProxy.log.error("Something went wrong when dispatching task manager to %1$s#%2$s.", entry.getKey(), entry.getValue());
-				e.printStackTrace();
+				if (IClConfig.debug)
+					e.printStackTrace();
 			}
 		}
 	}

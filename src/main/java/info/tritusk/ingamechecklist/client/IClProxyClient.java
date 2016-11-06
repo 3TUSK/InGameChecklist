@@ -6,6 +6,7 @@ import info.tritusk.ingamechecklist.client.handler.HUDHandler;
 import info.tritusk.ingamechecklist.client.handler.KeyBindingHandler;
 import info.tritusk.ingamechecklist.common.IClProxy;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +30,6 @@ public class IClProxyClient extends IClProxy {
 	@Override
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
-		
 		ClientRegistry.registerKeyBinding(KEY_SHOW_TASK_DESC);
 	}
 	
@@ -38,6 +38,7 @@ public class IClProxyClient extends IClProxy {
 		super.postInit(event);
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
 		MinecraftForge.EVENT_BUS.register(new KeyBindingHandler());
+		ClientCommandHandler.instance.registerCommand(new CommandTask());
 	}
 
 }

@@ -81,10 +81,11 @@ public class TaskEntryManager implements ITaskManager {
 						String taskDesc = ((Element)aTask).getTextContent();
 						tasks.put(taskName, new TaskEntry(taskName, taskDesc));
 					} catch (Exception e) {
-						IClProxy.log.error("Error occured when loading new task.");
+						IClProxy.log.error("Error occured when loading a new task.");
 					}
 				}
 			}
+			IClProxy.log.info("Loaded local checklist.");
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("Tasks file may be empty or broken. A back up will be created.");

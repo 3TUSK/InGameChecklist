@@ -6,9 +6,7 @@ import java.io.FileInputStream;
 import org.apache.logging.log4j.Logger;
 
 import info.tritusk.ingamechecklist.api.ITaskManager;
-import info.tritusk.ingamechecklist.common.command.CommandTask;
 import info.tritusk.ingamechecklist.common.task.TaskEntryManager;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -36,7 +34,7 @@ public class IClProxy {
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
-		ClientCommandHandler.instance.registerCommand(new CommandTask());
+		IClInterModManager.INSTANCE.dispatchTaskManager();
 	}
 
 	public void onServerStarting(FMLServerStartingEvent event) {
@@ -45,7 +43,6 @@ public class IClProxy {
 			if (!file.exists())
 				file.createNewFile();
 			manager.loadFrom(new FileInputStream(file));
-			log.info("Loaded local checklist.");
 		} catch (Exception e) {
 			log.error("Something went extremely wrong...");
 			e.printStackTrace();
