@@ -5,7 +5,7 @@
   "description": "Add HUD style checklist into Minecraft",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "http://mcmodding.tritusk.info/ingamechecklist",
   "updateUrl": "",
   "authorList": ["3TUSK"],
   "credits": "This guy: https://github.com/bakaxyf/ because he asked me to do it",
