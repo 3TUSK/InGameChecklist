@@ -1,8 +1,12 @@
 package info.tritusk.ingamechecklist.common.task;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +19,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,7 +27,9 @@ import org.w3c.dom.NodeList;
 
 import info.tritusk.ingamechecklist.api.ITask;
 import info.tritusk.ingamechecklist.api.ITaskManager;
+import info.tritusk.ingamechecklist.common.IClConfig;
 import info.tritusk.ingamechecklist.common.IClProxy;
+import net.minecraftforge.common.DimensionManager;
 
 public class TaskEntryManager implements ITaskManager {
 	
@@ -62,8 +69,8 @@ public class TaskEntryManager implements ITaskManager {
 	public boolean loadFrom(InputStream input) {
 		try {
 			xmlFile = reader.parse(input);
-			Node mainNode = xmlFile.getElementsByTagName("checklist").item(0);
-			NodeList checklist = ((Element) mainNode).getElementsByTagName("task");
+			Element main = (Element)xmlFile.getElementsByTagName("checklist").item(0);
+			NodeList checklist = main.getElementsByTagName("task");
 			final int taskNumber = checklist.getLength();
 			if (taskNumber > 0) {
 				for (int n = 0; n < taskNumber; n++) {
@@ -79,9 +86,18 @@ public class TaskEntryManager implements ITaskManager {
 			}
 			return true;
 		} catch (Exception e) {
-			IClProxy.log.error("Error occured when loading checklist.");
-			IClProxy.log.error("Please double check your checklist file, make sure that everything matches standard.");
-			e.printStackTrace();
+			IClProxy.log.error("Tasks file may be empty or broken. A back up will be created.");
+			if (IClConfig.Options.debug)
+				e.printStackTrace();
+			try {
+				OutputStream out = new FileOutputStream(new File(DimensionManager.getCurrentSaveRootDirectory(), "InGameChecklist_bak.xml"), false);
+				IOUtils.copy(input, out);
+				new OutputStreamWriter(out, "UTF-8").flush();
+			} catch (FileNotFoundException impossible) {
+				//Constructor of File(parent, child) only throw FileNotFoundException when child == null
+			} catch (IOException _e) {
+				IClProxy.log.error("Failed to create backup, existed task file may be overwritten soon or later. Please do manual backup immediately!");
+			}
 			return false;
 		}
 	}

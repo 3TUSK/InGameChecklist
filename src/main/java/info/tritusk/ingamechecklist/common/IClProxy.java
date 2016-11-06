@@ -9,7 +9,7 @@ import info.tritusk.ingamechecklist.api.ITaskManager;
 import info.tritusk.ingamechecklist.common.command.CommandTask;
 import info.tritusk.ingamechecklist.common.task.TaskEntryManager;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 public class IClProxy {
+	
+	public static final String TASKS_FILE_NAME = "InGameChecklist.xml";
 	
 	public static Logger log;
 
@@ -39,7 +41,7 @@ public class IClProxy {
 
 	public void onServerStarting(FMLServerStartingEvent event) {
 		try {
-			File file = new File(FMLClientHandler.instance().getSavesDirectory(), "InGameChecklist.xml");
+			File file = new File(DimensionManager.getCurrentSaveRootDirectory(), TASKS_FILE_NAME);
 			if (!file.exists())
 				file.createNewFile();
 			manager.loadFrom(new FileInputStream(file));
@@ -52,7 +54,7 @@ public class IClProxy {
 	
 	public void onServerStopping(FMLServerStoppingEvent event) {
 		//There is no check whether this file exists or not because it should be created on FMLServerStartingEvent is called
-		manager.saveTo(new File(FMLClientHandler.instance().getSavesDirectory(), "InGameChecklist.xml"));
+		manager.saveTo(new File(DimensionManager.getCurrentSaveRootDirectory(), TASKS_FILE_NAME));
 	}
 
 }
