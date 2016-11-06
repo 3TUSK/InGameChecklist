@@ -15,9 +15,9 @@ import net.minecraftforge.server.command.CommandTreeBase;
 public class CommandTask extends CommandTreeBase {
 
 	public CommandTask() {
-		this.addSubcommand("add", "", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0))));
-		this.addSubcommand("remove", "", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName)));
-		this.addSubcommand("show", "", (aSender, aTaskName, aTaskDesc) -> {
+		this.addSubcommand("add", "/checklist add [task] [description]", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0))));
+		this.addSubcommand("remove", "/checklist remove [task]", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName)));
+		this.addSubcommand("show", "/checklist show [task]", (aSender, aTaskName, aTaskDesc) -> {
 			String info = "";
 			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
 			while (iterator.hasNext()) {
@@ -25,20 +25,13 @@ public class CommandTask extends CommandTreeBase {
 				if (yetAnotherTask.name().equals(aTaskName))
 					info = yetAnotherTask.description();
 			}
-			this.sendTextMessage(aSender, info);
+			sendTextMessage(aSender, info);
 		});
-		this.addSubcommand("update", "", (aSender, aTaskName, aTaskDesc) -> {
+		this.addSubcommand("update", "/checklist update [task] [description]", (aSender, aTaskName, aTaskDesc) -> {
 			IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName));
 			IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
 		});
-		this.addSubcommand("help", "", (aSender, aTaskName, aTaskDesc) -> {
-			this.sendTextMessage(aSender, this.getCommandUsage(aSender));
-			this.sendTextMessage(aSender, "    " + "help: Show this help");
-			this.sendTextMessage(aSender, "    " + "add: Add a new task to checklist");
-			this.sendTextMessage(aSender, "    " + "remove: Remove an existed task from checklist");
-			this.sendTextMessage(aSender, "    " + "show: Show description of a task");
-			this.sendTextMessage(aSender, "    " + "update: Update the description for an existed task");
-		});
+		this.addSubcommand("help", "/checklist help - show help message", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, this.getCommandUsage(aSender)));
 	}
 	
 	@Override
@@ -48,10 +41,10 @@ public class CommandTask extends CommandTreeBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/checklist <help|add|remove|show|update> [task] [task description]";
+		return "/checklist <help|add|remove|show|update>";
 	}
 	
-	private void sendTextMessage(ICommandSender sender, String message) {
+	private static void sendTextMessage(ICommandSender sender, String message) {
 		sender.addChatMessage(new TextComponentString(message));
 	}
 	
@@ -67,8 +60,17 @@ public class CommandTask extends CommandTreeBase {
 			}
 			@Override
 			public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-				String[] subArgs = new String[args.length - 1];
-				System.arraycopy(args, 1, subArgs, 0, args.length);
+				if (args.length == 0 || args[0].equals("help")) {
+					sendTextMessage(sender, getCommandUsage(sender));
+					return;
+				}
+				String[] subArgs;
+				if (args.length > 1) {
+					subArgs = new String[args.length - 1];
+					System.arraycopy(args, 1, subArgs, 0, args.length - 1);
+				} else {
+					subArgs = new String[0];
+				}	
 				logic.execute(sender, args[0], subArgs);
 			}
 		});

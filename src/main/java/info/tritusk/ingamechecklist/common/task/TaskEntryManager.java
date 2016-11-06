@@ -98,6 +98,7 @@ public class TaskEntryManager implements ITaskManager {
 			} catch (IOException _e) {
 				IClProxy.log.error("Failed to create backup, existed task file may be overwritten soon or later. Please do manual backup immediately!");
 			}
+			xmlFile = reader.newDocument();
 			return false;
 		}
 	}
@@ -112,7 +113,12 @@ public class TaskEntryManager implements ITaskManager {
 				aTask.setTextContent(task.description());
 				main.appendChild(aTask);
 			});
-			xmlFile.replaceChild(main, xmlFile.getElementsByTagName("checklist").item(0));
+			NodeList list = xmlFile.getElementsByTagName("checklist");
+			if (list.getLength() != 0) {
+				xmlFile.replaceChild(main, xmlFile.getElementsByTagName("checklist").item(0));
+			} else {
+				xmlFile.appendChild(main);
+			}
 			writer.transform(new DOMSource(xmlFile), new StreamResult(new FileOutputStream(file, false)));
 			IClProxy.log.info("Successfully saved local checklist.");
 			localEntryList.clear();
