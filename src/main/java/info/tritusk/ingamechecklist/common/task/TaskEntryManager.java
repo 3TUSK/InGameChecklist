@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -108,20 +110,41 @@ public class TaskEntryManager implements ITaskManager {
 		try {
 			Element list = xmlFile.getDocumentElement();
 			if (list == null || !list.getAttribute("name").equals("checklist")) {
-				Element main = xmlFile.createElement("checklist");
+				Element main = xmlFile.createElement("checklist"); // This also automatically appends element
 				tasks.entrySet().forEach(task -> {
 					Element aTask = xmlFile.createElement("task");
 					aTask.setAttribute("name", task.getKey());
 					aTask.setTextContent(task.getValue().description());
 					main.appendChild(aTask);
 				});
-				xmlFile.appendChild(main);
 			} else {
+				List<String> knownTasks = new ArrayList<>(tasks.keySet());
+				List<String> reduntant = new ArrayList<>();
 				NodeList taskNodes = list.getElementsByTagName("task");
 				final int length = taskNodes.getLength();
 				for (int i = 0; i < length; i++) {
-					
+					Element e = (Element)taskNodes.item(i);
+					if (e != null) {
+						if (knownTasks.contains(e.getAttribute("name"))) {
+							e.setTextContent(tasks.get(e.getAttribute("name")).description());
+							reduntant.add(e.getAttribute("name"));
+						} else {
+							list.removeChild(e);
+						} 
+					} else {
+						IClProxy.log.trace("Found a null element");
+					}
 				}
+				
+				knownTasks.removeAll(reduntant);
+				reduntant.clear();
+				
+				knownTasks.forEach(s -> {
+					Element newTask = xmlFile.createElement("task");
+					newTask.setAttribute("name", s);
+					newTask.setTextContent(tasks.get(s).description());
+					list.appendChild(newTask);
+				});
 			}			
 			writer.transform(new DOMSource(xmlFile), new StreamResult(new FileOutputStream(file, false)));
 			IClProxy.log.info("Successfully saved local checklist.");
@@ -138,6 +161,21 @@ public class TaskEntryManager implements ITaskManager {
 	
 	public Collection<ITask> getTasks() {
 		return tasks.values();
+	}
+
+	@Override
+	public boolean addTask(ITask task) {
+		return tasks.putIfAbsent(task.name(), task) == null;
+	}
+
+	@Override
+	public boolean removeTask(ITask task) {
+		return tasks.remove(task.name()) != null;
+	}
+
+	@Override
+	public ITask getByName(String name) {
+		return tasks.get(name);
 	}
 
 }

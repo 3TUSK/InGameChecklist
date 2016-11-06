@@ -1,7 +1,5 @@
 package info.tritusk.ingamechecklist.common.command;
 
-import java.util.Iterator;
-
 import info.tritusk.ingamechecklist.api.ITask;
 import info.tritusk.ingamechecklist.common.IClProxy;
 import info.tritusk.ingamechecklist.common.task.TaskEntry;
@@ -15,21 +13,18 @@ import net.minecraftforge.server.command.CommandTreeBase;
 public class CommandTask extends CommandTreeBase {
 
 	public CommandTask() {
-		this.addSubcommand("add", "/checklist add [task] [description]", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0))));
-		this.addSubcommand("remove", "/checklist remove [task]", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName)));
-		this.addSubcommand("show", "/checklist show [task]", (aSender, aTaskName, aTaskDesc) -> {
-			String info = "";
-			Iterator<ITask> iterator = IClProxy.manager.getTasks().iterator();
-			while (iterator.hasNext()) {
-				ITask yetAnotherTask = iterator.next();
-				if (yetAnotherTask.name().equals(aTaskName))
-					info = yetAnotherTask.description();
-			}
-			sendTextMessage(aSender, info);
+		this.addSubcommand("add", "/checklist add [task] [description]", (aSender, aTaskName, aTaskDesc) -> IClProxy.manager.addTask(new TaskEntry(aTaskName, buildString(aTaskDesc, 0))));
+		this.addSubcommand("remove", "/checklist remove [task]", (aSender, aTaskName, aTaskDesc) -> {
+			ITask task = IClProxy.manager.getByName(aTaskName);
+			if (task != null)
+				IClProxy.manager.removeTask(task);
 		});
+		this.addSubcommand("show", "/checklist show [task]", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, IClProxy.manager.getByName(aTaskName).description()));
 		this.addSubcommand("update", "/checklist update [task] [description]", (aSender, aTaskName, aTaskDesc) -> {
-			IClProxy.manager.getTasks().removeIf(task -> task.name().equals(aTaskName));
-			IClProxy.manager.getTasks().add(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
+			ITask task = IClProxy.manager.getByName(aTaskName);
+			if (task != null)
+				IClProxy.manager.removeTask(task);
+			IClProxy.manager.addTask(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
 		});
 		this.addSubcommand("help", "/checklist help - show help message", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, this.getCommandUsage(aSender)));
 	}
