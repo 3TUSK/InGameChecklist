@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,7 +38,7 @@ public class TaskEntryManager implements ITaskManager {
 	
 	private Document xmlFile;
 	
-	private List<ITask> localEntryList = new ArrayList<>();
+	private Map<String, ITask> tasks = new HashMap<>();
 	
 	private boolean initialized = false;
 	
@@ -78,7 +78,7 @@ public class TaskEntryManager implements ITaskManager {
 						Node aTask = checklist.item(n);
 						String taskName = ((Element)aTask).getAttribute("name");
 						String taskDesc = ((Element)aTask).getTextContent();
-						localEntryList.add(new TaskEntry(taskName, taskDesc));
+						tasks.put(taskName, new TaskEntry(taskName, taskDesc));
 					} catch (Exception e) {
 						IClProxy.log.error("Error occured when loading new task.");
 					}
@@ -106,22 +106,26 @@ public class TaskEntryManager implements ITaskManager {
 	@Override
 	public boolean saveTo(final File file) {
 		try {
-			Element main = xmlFile.createElement("checklist");
-			localEntryList.forEach(task -> {
-				Element aTask = xmlFile.createElement("task");
-				aTask.setAttribute("name", task.name());
-				aTask.setTextContent(task.description());
-				main.appendChild(aTask);
-			});
-			NodeList list = xmlFile.getElementsByTagName("checklist");
-			if (list.getLength() != 0) {
-				xmlFile.replaceChild(main, xmlFile.getElementsByTagName("checklist").item(0));
-			} else {
+			Element list = xmlFile.getDocumentElement();
+			if (list == null || !list.getAttribute("name").equals("checklist")) {
+				Element main = xmlFile.createElement("checklist");
+				tasks.entrySet().forEach(task -> {
+					Element aTask = xmlFile.createElement("task");
+					aTask.setAttribute("name", task.getKey());
+					aTask.setTextContent(task.getValue().description());
+					main.appendChild(aTask);
+				});
 				xmlFile.appendChild(main);
-			}
+			} else {
+				NodeList taskNodes = list.getElementsByTagName("task");
+				final int length = taskNodes.getLength();
+				for (int i = 0; i < length; i++) {
+					
+				}
+			}			
 			writer.transform(new DOMSource(xmlFile), new StreamResult(new FileOutputStream(file, false)));
 			IClProxy.log.info("Successfully saved local checklist.");
-			localEntryList.clear();
+			tasks.clear();
 			xmlFile = null;
 			return true;
 		} catch (Exception e) {
@@ -133,7 +137,7 @@ public class TaskEntryManager implements ITaskManager {
 	}
 	
 	public Collection<ITask> getTasks() {
-		return localEntryList;
+		return tasks.values();
 	}
 
 }
