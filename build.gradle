@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.0.2"
+version = "0.1.0"
 group = "info.tritusk.ingamechecklist"
 archivesBaseName = "InGameChecklist"
 
@@ -28,10 +28,6 @@ minecraft {
     replace "@IGC_VERSION", project.version
 }
 
-dependencies {
-
-}
-
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -45,4 +41,21 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allJava
+	classifier = 'sources'
+}
+
+task apiJar(type: Jar) {
+	from sourceSets.main.allSource
+	from sourceSets.main.output
+	include 'info/tritusk/ingamechecklist/api/**/*'
+	classifier = 'api'
+}
+
+artifacts {
+	archives sourcesJar
+	archives apiJar
 }
