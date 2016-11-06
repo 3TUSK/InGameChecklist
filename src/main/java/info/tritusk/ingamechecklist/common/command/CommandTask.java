@@ -1,6 +1,7 @@
 package info.tritusk.ingamechecklist.common.command;
 
 import info.tritusk.ingamechecklist.api.ITask;
+import info.tritusk.ingamechecklist.client.handler.HUDHandler;
 import info.tritusk.ingamechecklist.common.IClProxy;
 import info.tritusk.ingamechecklist.common.task.TaskEntry;
 import net.minecraft.command.CommandBase;
@@ -19,7 +20,7 @@ public class CommandTask extends CommandTreeBase {
 			if (task != null)
 				IClProxy.manager.removeTask(task);
 		});
-		this.addSubcommand("show", "/checklist show [task]", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, IClProxy.manager.getByName(aTaskName).description()));
+		this.addSubcommand("show", "/checklist show [task]", (aSender, aTaskName, aTaskDesc) -> HUDHandler.safeSetPinnedTask(aTaskName));
 		this.addSubcommand("update", "/checklist update [task] [description]", (aSender, aTaskName, aTaskDesc) -> {
 			ITask task = IClProxy.manager.getByName(aTaskName);
 			if (task != null)
