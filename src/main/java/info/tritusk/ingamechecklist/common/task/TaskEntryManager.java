@@ -57,7 +57,8 @@ public class TaskEntryManager implements ITaskManager {
 			initialized = reader != null && writer != null;
 			return initialized;
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (IClConfig.debug)
+				e.printStackTrace();
 			return false;
 		}
 	}
@@ -89,7 +90,7 @@ public class TaskEntryManager implements ITaskManager {
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("Tasks file may be empty or broken. A back up will be created.");
-			if (IClConfig.Options.debug)
+			if (IClConfig.debug)
 				e.printStackTrace();
 			try {
 				OutputStream out = new FileOutputStream(new File(DimensionManager.getCurrentSaveRootDirectory(), "InGameChecklist_bak.xml"), false);
@@ -153,7 +154,7 @@ public class TaskEntryManager implements ITaskManager {
 			return true;
 		} catch (Exception e) {
 			IClProxy.log.error("An error occured when trying to save the local checklist file.");
-			if (IClConfig.Options.debug)
+			if (IClConfig.debug)
 				e.printStackTrace();
 			return false;
 		}
