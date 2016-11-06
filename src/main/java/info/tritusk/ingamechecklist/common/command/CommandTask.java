@@ -9,6 +9,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 public class CommandTask extends CommandTreeBase {
@@ -28,6 +29,13 @@ public class CommandTask extends CommandTreeBase {
 			IClProxy.manager.addTask(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
 		});
 		this.addSubcommand("help", "/checklist help - show help message", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, this.getCommandUsage(aSender)));
+		this.addSubcommand("refresh", "/checklist refresh - reload tasks", (aSender, aTaskName, aTaskDesc) -> {
+			try {
+				IClProxy.manager.loadFrom(new java.io.FileInputStream(new java.io.File(DimensionManager.getCurrentSaveRootDirectory(), "InGameChecklist.xml")));
+			} catch (Exception e) {
+				//Impossible
+			}
+		});
 	}
 	
 	@Override
