@@ -28,13 +28,10 @@ public class CommandTask extends CommandTreeBase {
 				IClProxy.manager.removeTask(task);
 			IClProxy.manager.addTask(new TaskEntry(aTaskName, buildString(aTaskDesc, 0)));
 		});
-		this.addSubcommand("help", "/checklist help - show help message", (aSender, aTaskName, aTaskDesc) -> sendTextMessage(aSender, this.getCommandUsage(aSender)));
 		this.addSubcommand("refresh", "/checklist refresh - reload tasks", (aSender, aTaskName, aTaskDesc) -> {
 			try {
 				IClProxy.manager.loadFrom(new java.io.FileInputStream(new java.io.File(DimensionManager.getCurrentSaveRootDirectory(), "InGameChecklist.xml")));
-			} catch (Exception e) {
-				//Impossible
-			}
+			} catch (Exception e) {/*Impossible*/}
 		});
 	}
 	
@@ -45,7 +42,7 @@ public class CommandTask extends CommandTreeBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/checklist <help|add|remove|show|update>";
+		return "/checklist <refresh|add|remove|show|update>";
 	}
 	
 	private static void sendTextMessage(ICommandSender sender, String message) {
