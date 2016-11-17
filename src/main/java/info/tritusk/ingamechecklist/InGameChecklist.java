@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
-@Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", dependencies = "required-after:Forge@[12.18.2.2104,)", useMetadata = true, clientSideOnly = true)
+@Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", dependencies = "required-after:forge@[13.19.*.*,)", useMetadata = true, clientSideOnly = true)
 public class InGameChecklist {
 	
 	@Mod.Instance("ingame_checklist")
