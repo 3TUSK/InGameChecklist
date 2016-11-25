@@ -54,11 +54,18 @@ public interface ITaskManager {
 	boolean addTask(ITask task);
 	
 	/**
-	 * Remove a {@link ITask tasks} instance from the manager instance.
+	 * Remove a {@link ITask task} instance from the manager instance.
 	 * @param task Task to remove
 	 * @return True if the process is successful
 	 */
 	boolean removeTask(ITask task);
+	
+	/**
+	 * remove a {@link ITask task} with given name
+	 * @param name
+	 * @return True if the process is successful
+	 */
+	boolean removeTaskByName(String name);
 	
 	/**
 	 * Get a task from this manager based on given name.

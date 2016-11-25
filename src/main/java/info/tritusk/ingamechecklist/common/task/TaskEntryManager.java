@@ -149,6 +149,11 @@ public class TaskEntryManager implements ITaskManager {
 	public boolean removeTask(ITask task) {
 		return tasks.remove(task.name()) != null;
 	}
+	
+	@Override
+	public boolean removeTaskByName(String name) {
+		return tasks.remove(name) != null;
+	}
 
 	@Override
 	public ITask getByName(String name) {
