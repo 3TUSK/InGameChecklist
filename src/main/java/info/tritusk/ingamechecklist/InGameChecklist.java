@@ -10,10 +10,14 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 @Mod(modid = "ingame_checklist", name = "In-Game Checklist", version = "@IGC_VERSION@", dependencies = "required-after:forge@[13.19.*.*,)", useMetadata = true, clientSideOnly = true)
-public class InGameChecklist {
+public enum InGameChecklist {
 	
-	@Mod.Instance("ingame_checklist")
-	public static InGameChecklist instance;
+	INSTANCE;
+	
+	@Mod.InstanceFactory
+	public static InGameChecklist grabInstance() {
+		return INSTANCE;
+	}
 	
 	@SidedProxy(serverSide = "info.tritusk.ingamechecklist.common.IClProxy", clientSide = "info.tritusk.ingamechecklist.client.IClProxyClient")
 	public static IClProxy proxy;
